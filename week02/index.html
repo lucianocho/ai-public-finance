@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2주차 실습 · 관리재정수지 만들기</title>
+<style>
+  :root{
+    --navy:#002F8E; --blue:#0F70C6; --sky:#E8F0FB; --ink:#1A2233; --mute:#61708A;
+    --line:#D6DEEA; --bg:#F4F6FA; --card:#FFFFFF; --red:#C8321E; --green:#1E7B4E;
+    --amber:#A8660A;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{font-size:16px;-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+       line-height:1.55;padding-bottom:96px}
+  header{background:var(--navy);color:#fff;padding:18px 18px 14px}
+  header .k{font-size:.75rem;letter-spacing:.06em;color:#9DB8E8}
+  header h1{margin:4px 0 0;font-size:1.15rem;font-weight:700;line-height:1.3}
+  header p{margin:6px 0 0;font-size:.82rem;color:#C9D8F2}
+
+  nav{display:flex;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  nav button{flex:1;border:0;background:transparent;padding:11px 2px;font:inherit;font-size:.8rem;
+             color:var(--mute);border-bottom:3px solid transparent}
+  nav button.on{color:var(--navy);border-bottom-color:var(--navy);font-weight:700}
+  nav button.done{color:var(--green)}
+
+  main{padding:16px 14px}
+  section{display:none}
+  section.on{display:block}
+  h2{font-size:1.02rem;margin:0 0 6px;color:var(--navy)}
+  .lead{font-size:.88rem;color:var(--mute);margin:0 0 14px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  .row{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:0}
+  .row .nm{flex:1;min-width:0}
+  .row .nm b{display:block;font-size:.93rem}
+  .row .nm span{font-size:.76rem;color:var(--mute)}
+  .badge{display:inline-block;font-size:.68rem;padding:2px 7px;border-radius:999px;margin-left:4px;vertical-align:middle}
+  .b-gen{background:#EEF1F6;color:#4C5A72}
+  .b-soc{background:#E6F4EC;color:#1E5C3B}
+  .b-fin{background:#FCEBE8;color:#8B2416}
+  .amt{font-variant-numeric:tabular-nums;font-size:.8rem;color:var(--mute);text-align:right;white-space:nowrap}
+  .sw{position:relative;width:46px;height:26px;border-radius:13px;background:#C4CCDA;border:0;flex:none;transition:.15s}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.15s}
+  .sw.on{background:var(--blue)}
+  .sw.on::after{left:23px}
+  .chk{width:24px;height:24px;border:2px solid #B9C4D6;border-radius:6px;background:#fff;flex:none}
+  .chk.on{background:var(--blue);border-color:var(--blue)}
+  .chk.on::after{content:"✓";color:#fff;display:block;text-align:center;line-height:20px;font-size:15px;font-weight:700}
+
+  .totals{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+  .tot{background:var(--sky);border-radius:10px;padding:10px 12px}
+  .tot small{display:block;font-size:.72rem;color:var(--mute)}
+  .tot b{font-size:1.15rem;font-variant-numeric:tabular-nums;color:var(--navy)}
+  .tot.big{grid-column:1/-1;background:var(--navy)}
+  .tot.big small{color:#9DB8E8}.tot.big b{color:#fff;font-size:1.4rem}
+
+  .btn{display:block;width:100%;border:0;border-radius:10px;padding:13px;font:inherit;font-size:.95rem;font-weight:700;
+       background:var(--navy);color:#fff;margin-top:10px}
+  .btn.sec{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn:disabled{opacity:.45}
+  .fb{margin-top:10px;padding:11px 12px;border-radius:10px;font-size:.87rem;display:none}
+  .fb.ok{display:block;background:#E6F4EC;color:#164A2E;border:1px solid #9FD3B4}
+  .fb.no{display:block;background:#FCEBE8;color:#6E1C11;border:1px solid #F0B3A8}
+
+  .code{background:#0F1A2E;color:#DCE6F5;border-radius:10px;padding:12px;font-family:"SF Mono",Menlo,Consolas,monospace;
+        font-size:.78rem;line-height:1.6;white-space:pre-wrap;word-break:keep-all}
+  .code .h{color:#9DB8E8}
+  .res{display:flex;justify-content:space-between;font-size:.85rem;margin:8px 0 6px}
+  .res b{font-variant-numeric:tabular-nums}
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+  .opts button{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 4px;font:inherit;font-size:.8rem;color:var(--ink)}
+  .opts button.pick{border-color:var(--navy);background:var(--sky);color:var(--navy);font-weight:700}
+  .opts button.right{border-color:var(--green);background:#E6F4EC;color:#164A2E;font-weight:700}
+  .opts button.wrong{border-color:var(--red);background:#FCEBE8;color:#6E1C11}
+  .why{font-size:.8rem;color:var(--mute);margin-top:8px;display:none}
+
+  .cl{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+  .cl:first-child{border-top:0}
+  .cl div{flex:1;font-size:.88rem}
+  .cl div small{display:block;color:var(--mute);font-size:.76rem}
+  textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:.8rem;line-height:1.5;resize:vertical}
+  .hint{font-size:.78rem;color:var(--mute)}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;
+       display:flex;gap:8px;z-index:6;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  .bar button{flex:1;border-radius:10px;padding:12px;font:inherit;font-weight:700;border:1.5px solid var(--navy);background:#fff;color:var(--navy)}
+  .bar button.pri{background:var(--navy);color:#fff}
+  .bar button:disabled{opacity:.35}
+  .note{font-size:.78rem;color:var(--mute);margin:10px 0 0}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1A2233;color:#fff;padding:9px 14px;
+         border-radius:8px;font-size:.82rem;opacity:0;pointer-events:none;transition:.2s;z-index:9}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="k">AI와 공공재정관리 · 2주차 대면 실습 (A·B트랙)</div>
+  <h1>1,621조원에서 728조원까지, 무엇을 뺄 것인가</h1>
+  <p>계정을 직접 켜고 끄면서 관리재정수지를 만들고, AI 코드의 오류를 진단합니다. 코드 작성은 없습니다.</p>
+</header>
+
+<nav>
+  <button data-s="1" class="on">① 빼기</button>
+  <button data-s="2">② 기금</button>
+  <button data-s="3">③ 진단</button>
+  <button data-s="4">④ 제출</button>
+</nav>
+
+<main>
+
+<!-- ① 총수입·총지출 -->
+<section id="s1" class="on">
+  <h2>① 총수입·총지출에 넣을 계정 고르기</h2>
+  <p class="lead">아래 자료는 이미 내부거래와 보전거래를 뺀 <b>순수입·순지출</b>입니다. 그런데 하나 더 빼야 할 것이 있습니다. 넣지 말아야 할 계정을 꺼 보세요.</p>
+  <div class="card" id="list1"></div>
+  <div class="totals">
+    <div class="tot"><small>총수입</small><b id="t1in">0.0</b></div>
+    <div class="tot"><small>총지출</small><b id="t1out">0.0</b></div>
+    <div class="tot big"><small>통합재정수지 = 총수입 − 총지출</small><b id="t1bal">0.0</b></div>
+  </div>
+  <button class="btn" id="check1">확인하기</button>
+  <div class="fb" id="fb1"></div>
+  <p class="note">발표치: 총수입 674.2 · 총지출 728.0 · 통합재정수지 △53.8조원 (2026년도 예산안)</p>
+</section>
+
+<!-- ② 사회보장성기금 -->
+<section id="s2">
+  <h2>② 관리재정수지에서 뺄 기금 고르기</h2>
+  <p class="lead">관리재정수지 = 통합재정수지 − <b>사회보장성기금 수지</b>. 아래는 사회보험성기금 6개입니다. 이 중 제외 대상만 고르세요.</p>
+  <div class="card" id="list2"></div>
+  <div class="totals">
+    <div class="tot"><small>통합재정수지</small><b id="t2int">△53.8</b></div>
+    <div class="tot"><small>선택한 기금 수지 합</small><b id="t2soc">0.0</b></div>
+    <div class="tot big"><small>관리재정수지</small><b id="t2bal">△53.8</b></div>
+  </div>
+  <button class="btn" id="check2">확인하기</button>
+  <div class="fb" id="fb2"></div>
+  <p class="note">발표치: 관리재정수지 △109.0조원 (GDP 대비 △4.0%), 사회보장성기금 수지 +55.2조원</p>
+</section>
+
+<!-- ③ AI 코드 진단 -->
+<section id="s3">
+  <h2>③ AI가 만든 코드 3종 진단</h2>
+  <p class="lead">세 코드 모두 오류 없이 실행되고 그럴듯한 숫자를 냅니다. 각 코드가 어떤 유형의 오류인지 고르세요.</p>
+  <div id="codes"></div>
+  <div class="card">
+    <b style="font-size:.9rem">오류 유형</b>
+    <div class="cl"><div><b>누락형</b><small>빼야 할 항목을 빼지 않음 → 총량이 부풀려짐</small></div></div>
+    <div class="cl"><div><b>오식별형</b><small>대상 집합을 잘못 지정 (예: 사회보험성 6개 전체 제외)</small></div></div>
+    <div class="cl"><div><b>부호형</b><small>더할 것을 빼거나 그 반대 → 결과가 그럴듯해 가장 놓치기 쉬움</small></div></div>
+  </div>
+</section>
+
+<!-- ④ 체크리스트·제출 -->
+<section id="s4">
+  <h2>④ 나의 AI 활동과 제출</h2>
+  <p class="lead">생성형 AI 앱에 프롬프트를 붙여넣고, 받은 코드를 아래 체크리스트로 검증한 뒤 제출용 요약을 만듭니다.</p>
+  <div class="card">
+    <b style="font-size:.9rem">프롬프트</b>
+    <div class="code" id="prompt">아래는 우리나라 중앙정부의 회계·기금별 수입·지출 자료다(단위: 조원). 컬럼은 구분, 성격, 순수입, 순지출이며 내부거래와 보전거래는 이미 제외되어 있다.
+
+이 데이터로 총수입, 총지출, 통합재정수지, 관리재정수지를 산출하는 파이썬 코드를 작성하라. 각 단계에서 무엇을 왜 제외하는지 주석으로 밝혀라.
+
+[표 붙여넣기]</div>
+    <button class="btn sec" id="copyP">프롬프트 복사</button>
+    <button class="btn sec" id="copyD">데이터 표 복사</button>
+  </div>
+  <div class="card">
+    <b style="font-size:.9rem">검증 체크리스트</b>
+    <div id="cklist"></div>
+  </div>
+  <div class="card">
+    <b style="font-size:.9rem">발견한 오류와 수정 내역</b>
+    <textarea id="memo" placeholder="예) AI 코드가 신용보증기금·외국환평형기금을 총수입에 포함(누락형). 성격=='금융성' 필터를 추가해 재실행 → 총수입 674.2로 일치."></textarea>
+  </div>
+  <button class="btn" id="makeSum">제출용 요약 만들기</button>
+  <textarea id="summary" style="display:none;margin-top:10px"></textarea>
+  <button class="btn sec" id="copyS" style="display:none">요약 복사</button>
+  <p class="note">활동 게시판 업로드 3종 — ① 프롬프트 ② AI 답변 캡처(수정 전·후) ③ 이 요약 붙여넣기<br>C트랙(코드 직접 작성)은 Colab 노트북 <code>week02_통합재정_실습노트북.ipynb</code>를 사용합니다.</p>
+</section>
+
+</main>
+
+<div class="bar">
+  <button id="prev">이전</button>
+  <button id="next" class="pri">다음</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── 데이터 (단위: 조원, 내부거래·보전거래 제외 후) ── */
+const ACC = [
+  {n:'일반회계', t:'일반', i:410.2, o:380.0, d:'국세 390.2 + 세외 20.0'},
+  {n:'특별회계 (21개)', t:'일반', i:17.4, o:60.0, d:'교통시설·환경개선·우편사업 등'},
+  {n:'국민연금기금', t:'사회보험성', soc:true, i:118.0, o:55.0},
+  {n:'사학연금기금', t:'사회보험성', soc:true, i:10.5, o:9.0},
+  {n:'고용보험기금', t:'사회보험성', soc:true, i:30.0, o:35.0},
+  {n:'산재보험및예방기금', t:'사회보험성', soc:true, i:16.5, o:20.8},
+  {n:'공무원연금기금', t:'사회보험성', soc:false, i:20.0, o:22.0, d:'적자분은 일반회계가 보전'},
+  {n:'군인연금기금', t:'사회보험성', soc:false, i:3.5, o:5.0, d:'적자분은 일반회계가 보전'},
+  {n:'공공자금관리기금', t:'일반', i:8.0, o:25.0, d:'계정성기금'},
+  {n:'주택도시기금', t:'일반', i:22.0, o:38.0, d:'사업성기금'},
+  {n:'기타 사업성기금 (44개)', t:'일반', i:18.1, o:78.2},
+  {n:'신용보증기금', t:'금융성', i:6.0, o:7.0, d:'보증 활동 — 실질적 재정활동 아님'},
+  {n:'외국환평형기금', t:'금융성', i:9.0, o:8.9, d:'환율 안정 — 실질적 재정활동 아님'},
+];
+const REAL = {inc:674.2, out:728.0, bal:-53.8, soc:55.2, mgd:-109.0};
+const f1 = v => (v<0?'△':'')+Math.abs(v).toFixed(1);
+const near = (a,b) => Math.abs(a-b) < 0.15;
+
+let cur = 1;
+const state = {on: ACC.map(()=>true), soc: ACC.map(()=>false), diag:{A:null,B:null,C:null}, ck:[0,0,0,0,0,0], done:[false,false,false,false]};
+try { const s = JSON.parse(localStorage.getItem('w02mobile')||'null'); if (s) Object.assign(state, s); } catch(e){}
+function save(){ try{ localStorage.setItem('w02mobile', JSON.stringify(state)); }catch(e){} }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1400); }
+function badge(t){ return `<span class="badge ${t==='금융성'?'b-fin':t==='사회보험성'?'b-soc':'b-gen'}">${t}</span>`; }
+
+/* ── ① ── */
+const list1 = document.getElementById('list1');
+function render1(){
+  list1.innerHTML = ACC.map((a,i)=>`
+    <div class="row">
+      <div class="nm"><b>${a.n}${badge(a.t)}</b><span>${a.d||''}</span></div>
+      <div class="amt">수입 ${a.i.toFixed(1)}<br>지출 ${a.o.toFixed(1)}</div>
+      <button class="sw ${state.on[i]?'on':''}" data-i="${i}" aria-label="포함 여부"></button>
+    </div>`).join('');
+  list1.querySelectorAll('.sw').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i; state.on[i]=!state.on[i]; save(); render1();}));
+  const inc = ACC.reduce((s,a,i)=>s+(state.on[i]?a.i:0),0);
+  const out = ACC.reduce((s,a,i)=>s+(state.on[i]?a.o:0),0);
+  document.getElementById('t1in').textContent = inc.toFixed(1);
+  document.getElementById('t1out').textContent = out.toFixed(1);
+  document.getElementById('t1bal').textContent = f1(inc-out);
+}
+document.getElementById('check1').addEventListener('click',()=>{
+  const inc = ACC.reduce((s,a,i)=>s+(state.on[i]?a.i:0),0);
+  const out = ACC.reduce((s,a,i)=>s+(state.on[i]?a.o:0),0);
+  const fb = document.getElementById('fb1');
+  const finOn = ACC.some((a,i)=>a.t==='금융성'&&state.on[i]);
+  const otherOff = ACC.some((a,i)=>a.t!=='금융성'&&!state.on[i]);
+  if (near(inc,REAL.inc) && near(out,REAL.out)) {
+    fb.className='fb ok'; fb.innerHTML='맞습니다. 금융성기금 8개와 외국환평형기금은 보증·환율 안정 같은 금융 활동이라 <b>실질적 재정활동이 아니므로 총수입·총지출에서 제외</b>합니다. 발표치 674.2 / 728.0과 일치합니다.';
+    state.done[0]=true; save(); markNav();
+  } else if (finOn) {
+    fb.className='fb no'; fb.innerHTML='아직 부풀려져 있습니다. 보증이나 환율 안정처럼 <b>돈을 빌려주거나 보유하는 활동</b>은 나라 살림의 지출이 아닙니다. 어떤 계정이 그런 성격인지 배지를 보세요.';
+  } else if (otherOff) {
+    fb.className='fb no'; fb.innerHTML='너무 많이 뺐습니다. 사회보험성기금이나 사업성기금은 실제로 돈이 국민에게 나가는 재정활동이므로 총지출에 포함됩니다.';
+  }
+});
+
+/* ── ② ── */
+const list2 = document.getElementById('list2');
+function render2(){
+  list2.innerHTML = ACC.map((a,i)=>a.t!=='사회보험성'?'':`
+    <div class="row">
+      <div class="nm"><b>${a.n}</b><span>수지 ${f1(a.i-a.o)}조원${a.d?' · '+a.d:''}</span></div>
+      <button class="chk ${state.soc[i]?'on':''}" data-i="${i}" aria-label="제외 선택"></button>
+    </div>`).join('');
+  list2.querySelectorAll('.chk').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i; state.soc[i]=!state.soc[i]; save(); render2();}));
+  const soc = ACC.reduce((s,a,i)=>s+(state.soc[i]?a.i-a.o:0),0);
+  document.getElementById('t2soc').textContent = (soc>=0?'+':'')+f1(soc);
+  document.getElementById('t2bal').textContent = f1(REAL.bal - soc);
+}
+document.getElementById('check2').addEventListener('click',()=>{
+  const fb = document.getElementById('fb2');
+  const picked = ACC.map((a,i)=>state.soc[i]);
+  const right = ACC.every((a,i)=> (a.t==='사회보험성' ? picked[i]===!!a.soc : true));
+  const cnt = picked.filter(Boolean).length;
+  if (right) {
+    fb.className='fb ok'; fb.innerHTML='맞습니다. 제외 대상은 <b>국민연금·사학연금·고용보험·산재보험</b> 4개입니다. 수급자가 본격 증가하기 전이라 흑자가 쌓여 통합재정수지를 실제보다 좋아 보이게 하는 착시 요인이므로 뺍니다. 관리재정수지 △109.0조원 일치.';
+    state.done[1]=true; save(); markNav();
+  } else if (cnt===6) {
+    fb.className='fb no'; fb.innerHTML='6개를 모두 골랐습니다. 이것이 <b>오식별형 오류</b>입니다. 사회보험성기금은 6개지만 관리재정수지에서 제외하는 사회보장성기금은 4개입니다. 공무원연금·군인연금은 적자를 일반회계가 메우는 구조라 성격이 다릅니다.';
+  } else {
+    fb.className='fb no'; fb.innerHTML='아직 아닙니다. 힌트: 국가재정운용계획 각주 — “사회보장성기금은 국민연금기금, 사립학교교직원연금기금, 고용보험기금, 산업재해보상보험및예방기금을 의미한다.”';
+  }
+});
+
+/* ── ③ ── */
+const CODES = [
+  {k:'A', steps:['모든 계정의 수입·지출을 합산','통합재정수지 = 총수입 − 총지출','사회보장성기금 4개 수지를 차감'], inc:689.2,out:743.9,bal:-54.7,mgd:-109.9, ans:'누락형',
+   why:'금융성기금·외국환평형기금을 거르지 않아 총수입·총지출이 15조원 부풀려졌습니다. 관리재정수지 오차는 0.9조원에 그쳐 대충 보면 넘어갑니다.'},
+  {k:'B', steps:['금융성 계정 제외 후 합산','통합재정수지 = 총수입 − 총지출','사회보장성기금 4개 수지를 <b>더함</b>'], inc:674.2,out:728.0,bal:-53.8,mgd:1.4, ans:'부호형',
+   why:'흑자인 사회보장성기금 수지를 빼야 하는데 더했습니다. 적자가 흑자로 바뀌었는데도 총수입·총지출·통합재정수지가 모두 정답과 같아 검증 없이는 발견하기 어렵습니다.'},
+  {k:'C', steps:['금융성 계정 제외','<b>보전수입·보전지출까지 포함</b>해 합산','통합재정수지 = 총수입 − 총지출','사회보장성기금 4개 수지를 차감'], inc:1130.2,out:1186.5,bal:-56.3,mgd:-111.5, ans:'누락형',
+   why:'국채 발행 수입과 상환 지출을 제외하지 않았습니다. 총수입이 1,130조원으로 뛰었는데도 수지 오차는 2.5조원뿐이라, 총량을 보지 않고 수지만 보면 놓칩니다.'},
+];
+const codesEl = document.getElementById('codes');
+function render3(){
+  codesEl.innerHTML = CODES.map(c=>`
+    <div class="card">
+      <b style="font-size:.95rem;color:var(--navy)">코드 ${c.k}</b>
+      <div class="code" style="margin-top:8px">${c.steps.map((s,i)=>`<span class="h">${i+1})</span> ${s}`).join('\n')}</div>
+      <div class="res"><span>총수입 <b>${c.inc.toLocaleString('ko',{minimumFractionDigits:1})}</b></span><span>총지출 <b>${c.out.toLocaleString('ko',{minimumFractionDigits:1})}</b></span></div>
+      <div class="res"><span>통합수지 <b>${f1(c.bal)}</b></span><span>관리수지 <b style="color:${c.mgd>0?'var(--red)':'inherit'}">${c.mgd>0?'+':''}${f1(c.mgd)}</b></span></div>
+      <div class="opts" data-k="${c.k}">
+        ${['누락형','오식별형','부호형'].map(t=>{
+          const p=state.diag[c.k]; let cls='';
+          if(p){ if(t===c.ans) cls='right'; else if(t===p) cls='wrong'; }
+          return `<button data-t="${t}" class="${cls}" ${p?'disabled':''}>${t}</button>`;}).join('')}
+      </div>
+      <div class="why" style="${state.diag[c.k]?'display:block':''}">${c.why}</div>
+    </div>`).join('') + `<div class="res" style="justify-content:center"><span>정답 · 총수입 674.2 / 총지출 728.0 / 통합 △53.8 / 관리 △109.0</span></div>`;
+  codesEl.querySelectorAll('.opts button').forEach(b=>b.addEventListener('click',()=>{
+    const k=b.parentElement.dataset.k; state.diag[k]=b.dataset.t; save(); render3();
+    if(Object.values(state.diag).every(Boolean)){ state.done[2]=true; save(); markNav(); }
+  }));
+}
+
+/* ── ④ ── */
+const CK = [
+  ['내부거래를 수입·지출 양쪽에서 제외했는가','두 컬럼 모두 차감하는지'],
+  ['보전거래를 제외했는가','국채 발행 수입이 총수입에 남아 있지 않은지'],
+  ['금융성기금·외국환평형기금을 제외했는가','필터 조건이 있는지'],
+  ['사회보장성기금 4개를 정확히 식별했는가','사회보험성 6개 전체를 넣지 않았는지'],
+  ['관리재정수지 산출 시 부호가 맞는가','통합 − 사회보장성 수지인지'],
+  ['산출 결과가 발표치와 일치하는가','통합 △53.8 / 관리 △109.0 대조'],
+];
+const ckEl = document.getElementById('cklist');
+function render4(){
+  ckEl.innerHTML = CK.map((c,i)=>`<div class="cl"><button class="chk ${state.ck[i]?'on':''}" data-i="${i}" aria-label="체크"></button><div>${c[0]}<small>${c[1]}</small></div></div>`).join('');
+  ckEl.querySelectorAll('.chk').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i; state.ck[i]=state.ck[i]?0:1; save(); render4();}));
+}
+function dataTable(){
+  return '구분\t성격\t순수입\t순지출\n' + ACC.map(a=>`${a.n}\t${a.t}\t${a.i.toFixed(1)}\t${a.o.toFixed(1)}`).join('\n');
+}
+async function copy(txt, msg){
+  try{ await navigator.clipboard.writeText(txt); toast(msg||'복사했습니다'); }
+  catch(e){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast(msg||'복사했습니다'); }
+}
+document.getElementById('copyP').addEventListener('click',()=>copy(document.getElementById('prompt').textContent,'프롬프트를 복사했습니다'));
+document.getElementById('copyD').addEventListener('click',()=>copy(dataTable(),'데이터 표를 복사했습니다'));
+document.getElementById('makeSum').addEventListener('click',()=>{
+  const d = state.diag;
+  const lines = [
+    '[2주차 AI 실습 · 제출 요약]',
+    `① 총수입·총지출: ${state.done[0]?'발표치 일치 (674.2 / 728.0)':'미완료'}`,
+    `② 관리재정수지: ${state.done[1]?'발표치 일치 (△109.0)':'미완료'}`,
+    `③ AI 코드 진단: A=${d.A||'-'} / B=${d.B||'-'} / C=${d.C||'-'}  (정답 A=누락형, B=부호형, C=누락형)`,
+    '④ 검증 체크리스트:',
+    ...CK.map((c,i)=>`   ${state.ck[i]?'☑':'☐'} ${c[0]}`),
+    '⑤ 발견한 오류와 수정 내역:',
+    '   ' + (document.getElementById('memo').value.trim() || '(작성 필요)').replace(/\n/g,'\n   '),
+  ];
+  const s = document.getElementById('summary'); s.value = lines.join('\n'); s.style.display='block';
+  document.getElementById('copyS').style.display='block';
+  state.done[3]=true; save(); markNav();
+});
+document.getElementById('copyS').addEventListener('click',()=>copy(document.getElementById('summary').value,'요약을 복사했습니다. 게시판에 붙여넣으세요'));
+document.getElementById('memo').addEventListener('input',()=>{});
+
+/* ── 내비게이션 ── */
+function show(n){
+  cur=n;
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on', s.id==='s'+n));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on', +b.dataset.s===n));
+  document.getElementById('prev').disabled = n===1;
+  document.getElementById('next').textContent = n===4 ? '완료' : '다음';
+  window.scrollTo({top:0});
+}
+function markNav(){ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('done', state.done[+b.dataset.s-1])); }
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>show(+b.dataset.s)));
+document.getElementById('prev').addEventListener('click',()=>show(Math.max(1,cur-1)));
+document.getElementById('next').addEventListener('click',()=>{ if(cur<4) show(cur+1); else toast('수고했습니다. 요약을 게시판에 올리세요'); });
+
+render1(); render2(); render3(); render4(); markNav(); show(1);
+</script>
+</body>
+</html>
