@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3주차 실습 · 예산편성 과정 이해도 자가진단</title>
+<style>
+  :root{--navy:#002F8E;--blue:#0F70C6;--sky:#E8F0FB;--ink:#1A2233;--mute:#61708A;--line:#D6DEEA;--bg:#F4F6FA;--card:#fff;
+        --red:#C8321E;--green:#1E7B4E;--amber:#A8660A}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:96px;
+       font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
+  header{background:var(--navy);color:#fff;padding:18px 18px 14px}
+  header .k{font-size:.75rem;letter-spacing:.06em;color:#9DB8E8}
+  header h1{margin:4px 0 0;font-size:1.15rem;font-weight:700;line-height:1.3}
+  header p{margin:6px 0 0;font-size:.82rem;color:#C9D8F2}
+  .prog{display:flex;gap:4px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  .prog span{flex:1;height:6px;border-radius:3px;background:#DDE3EC}
+  .prog span.ok{background:var(--green)}.prog span.warn{background:var(--amber)}.prog span.bad{background:var(--red)}.prog span.cur{background:var(--blue)}
+  main{padding:16px 14px}
+  .step{font-size:.75rem;color:var(--mute);letter-spacing:.04em}
+  h2{font-size:1.05rem;margin:2px 0 8px;color:var(--navy)}
+  .role{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--sky);color:var(--navy);margin-bottom:8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  .sit{font-size:.92rem}
+  .sit b{color:var(--navy)}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;
+       margin-bottom:8px;font:inherit;font-size:.9rem;color:var(--ink);line-height:1.5}
+  .opt .l{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--sky);color:var(--navy);text-align:center;
+          line-height:22px;font-size:.78rem;font-weight:700;margin-right:8px;vertical-align:top}
+  .opt.pick{border-color:var(--navy);background:var(--sky)}
+  .opt.ok{border-color:var(--green);background:#E6F4EC}
+  .opt.warn{border-color:var(--amber);background:#FBF1E2}
+  .opt.bad{border-color:var(--red);background:#FCEBE8}
+  .opt:disabled{opacity:.92}
+  .fb{margin-top:6px;padding:12px;border-radius:10px;font-size:.87rem;display:none}
+  .fb.ok{display:block;background:#E6F4EC;border:1px solid #9FD3B4;color:#164A2E}
+  .fb.warn{display:block;background:#FBF1E2;border:1px solid #E5C48A;color:#5C3A05}
+  .fb.bad{display:block;background:#FCEBE8;border:1px solid #F0B3A8;color:#6E1C11}
+  .fb .law{display:block;margin-top:8px;font-size:.8rem;font-family:"SF Mono",Menlo,Consolas,monospace;opacity:.85}
+  .fb .tag{display:inline-block;font-size:.7rem;padding:1px 7px;border-radius:999px;background:rgba(0,0,0,.08);margin-top:6px}
+  .btn{display:block;width:100%;border:0;border-radius:10px;padding:13px;font:inherit;font-size:.95rem;font-weight:700;background:var(--navy);color:#fff;margin-top:10px}
+  .btn.sec{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn:disabled{opacity:.4}
+  .res table{width:100%;border-collapse:collapse;font-size:.82rem}
+  .res th,.res td{border-bottom:1px solid var(--line);padding:7px 4px;text-align:left;vertical-align:top}
+  .res th{color:var(--mute);font-weight:600;font-size:.74rem}
+  .pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:.72rem;font-weight:700;white-space:nowrap}
+  .pill.ok{background:#E6F4EC;color:var(--green)}.pill.warn{background:#FBF1E2;color:var(--amber)}.pill.bad{background:#FCEBE8;color:var(--red)}
+  .score{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+  .score div{background:var(--sky);border-radius:10px;padding:10px;text-align:center}
+  .score small{display:block;font-size:.7rem;color:var(--mute)}.score b{font-size:1.3rem;color:var(--navy)}
+  .code{background:#0F1A2E;color:#DCE6F5;border-radius:10px;padding:12px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.78rem;line-height:1.6;white-space:pre-wrap}
+  .cl{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+  .cl:first-child{border-top:0}
+  .chk{width:24px;height:24px;border:2px solid #B9C4D6;border-radius:6px;background:#fff;flex:none}
+  .chk.on{background:var(--blue);border-color:var(--blue)}
+  .chk.on::after{content:"✓";color:#fff;display:block;text-align:center;line-height:20px;font-size:15px;font-weight:700}
+  .cl div{flex:1;font-size:.88rem}.cl div small{display:block;color:var(--mute);font-size:.76rem}
+  textarea{width:100%;min-height:130px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:.8rem;line-height:1.5}
+  .note{font-size:.78rem;color:var(--mute);margin:10px 0 0}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:8px;z-index:6;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  .bar button{flex:1;border-radius:10px;padding:12px;font:inherit;font-weight:700;border:1.5px solid var(--navy);background:#fff;color:var(--navy)}
+  .bar button.pri{background:var(--navy);color:#fff}.bar button:disabled{opacity:.35}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1A2233;color:#fff;padding:9px 14px;border-radius:8px;font-size:.82rem;opacity:0;pointer-events:none;transition:.2s;z-index:9}
+  .toast.show{opacity:1}
+  section{display:none}section.on{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div class="k">AI와 공공재정관리 · 3주차 대면 실습</div>
+  <h1>예산편성 과정 이해도 자가진단</h1>
+  <p>부처 예산담당관이 되어 7개 핵심 절차에서 결정합니다. 마지막에 영역별 이해도와 복습 포인트가 피드백으로 제공됩니다. 점수를 내는 시험이 아니라 무엇을 다시 봐야 하는지 확인하는 도구입니다.</p>
+</header>
+<div class="prog" id="prog"></div>
+<main>
+  <section id="intro" class="on">
+    <div class="card">
+      <div class="role">역할 · ○○부 예산담당관 (핵심 절차 6은 기획예산처 사무관)</div>
+      <p class="sit"><b>2027년도 예산</b>을 편성하는 2026년 한 해를 따라갑니다. 1월 중기사업계획서부터 5월 예산요구서 제출까지, 각 핵심 절차에서 선택지는 3개입니다. 한 번 고르면 되돌릴 수 없습니다. 실제 예산담당관도 그렇습니다.</p>
+      <p class="sit">네 영역을 진단합니다. <b>절차와 시기</b> · <b>예산 원칙</b> · <b>조직체계</b> · <b>통제장치</b>. 판정은 세 가지입니다. <span class="pill ok">통과</span> 원칙과 조문에 부합 / <span class="pill warn">경고</span> 위법은 아니나 원칙 취지를 우회 / <span class="pill bad">오류</span> 조문 위반 또는 개편 전 체계 적용</p>
+      <p class="note">근거 조문은 2025년 10월 1일 개정 「국가재정법」(법률 제21738호) 기준입니다. 판정 뒤에는 법령 원문으로 반드시 대조하세요. 이 앱의 서술도 검증 대상입니다.</p>
+    </div>
+    <button class="btn" id="start">시작하기</button>
+  </section>
+  <section id="gate"></section>
+  <section id="result"></section>
+</main>
+<div class="bar">
+  <button id="prev" disabled>이전</button>
+  <button id="next" class="pri" disabled>다음</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const GATES = [
+ {m:'1월', t:'신규사업을 어디에 담을 것인가', role:'○○부 예산담당관',
+  s:'총사업비 <b>600억원</b>(국비 400억원)의 신규 청년창업센터 건립을 구상 중이다. 건설공사가 포함된다. 2027년도 예산 반영을 목표로 한다.',
+  o:[
+   {t:'1월 31일까지 중기사업계획서에 신규사업으로 포함하고, 예비타당성조사 신청을 준비한다', v:'ok', f:'맞습니다. 신규사업은 매년 1월 31일까지 중기사업계획서로 제출해야 하고(제28조), 총사업비 500억원 이상·국비 300억원 이상의 건설공사 포함 사업은 예타 대상입니다(제38조 제1항). 편성 1년 전에 절차가 시작됩니다.', law:'국가재정법 제28조, 제38조 제1항', tag:'절차 준수'},
+   {t:'예타를 피하기 위해 총사업비를 480억원으로 낮춰 기재하고, 착공 후 증액한다', v:'bad', f:'예타 회피입니다. 예타 대상 규모에 미달해 조사를 받지 않았다가 추진 중 규모가 커지면 타당성재조사 대상이 됩니다(제50조 제2항 제1호). 국회 보고까지 이어지므로 사업이 더 늦어집니다.', law:'국가재정법 제38조, 제50조 제2항', tag:'절차 회피'},
+   {t:'중기사업계획서에는 넣지 않고 5월 예산요구서에 바로 담는다', v:'bad', f:'신규사업의 중기사업계획서 제출은 의무입니다(제28조). 예타도 편성 전에 끝나야 하므로(제38조 "예산을 편성하기 위하여 미리"), 5월에 처음 나타난 사업은 반영되지 않습니다.', law:'국가재정법 제28조, 제38조 제1항', tag:'절차 누락'}
+  ]},
+ {m:'3월', t:'지출한도를 넘는 소요', role:'○○부 예산담당관',
+  s:'예산안편성지침과 함께 ○○부 지출한도 <b>1조 2,000억원</b>이 통보되었다. 실·국에서 올라온 소요를 합치면 <b>1조 5,000억원</b>이다.',
+  o:[
+   {t:'한도 안에서 사업 우선순위를 조정하고, 꼭 필요한 초과분은 별도 논리와 함께 구분해 요구한다', v:'ok', f:'총액배분자율편성의 취지입니다. 재정당국은 총량(한도)을 정하고 부처는 그 안에서 배분을 자율적으로 결정합니다(제29조 제2항). 한도 초과분을 구분해 두면 심의 단계에서 논의 대상이 됩니다.', law:'국가재정법 제29조 제2항', tag:'한정성 준수'},
+   {t:'소요 1조 5,000억원을 그대로 요구한다. 깎이는 것은 기획예산처의 몫이다', v:'warn', f:'위법은 아니지만 지침에 부합하지 않는 요구서는 기한을 정해 수정·보완 요구를 받습니다(제31조 제3항). 톱다운 제도 아래에서는 한도 초과 요구가 부처의 우선순위 판단을 재정당국에 넘기는 결과가 되어, 정작 중요한 사업이 깎일 수 있습니다.', law:'국가재정법 제31조 제3항', tag:'한정성(금액) 우회'},
+   {t:'한도를 맞추기 위해 법령에 따라 지급하는 연금·보조금까지 일률 삭감한다', v:'bad', f:'법령으로 지급 대상과 기준이 정해진 의무지출은 예산 과정에서 조정할 수 없습니다. 국가재정운용계획도 의무지출과 재량지출을 구분해 관리합니다(제7조 제2항 제4호의2). 조정 여지는 재량지출에만 있습니다.', law:'국가재정법 제7조 제2항', tag:'의무·재량 혼동'}
+  ]},
+ {m:'5월', t:'예산요구서에 무엇을 담는가', role:'○○부 예산담당관',
+  s:'요구 사업 중에 <b>3년에 걸친 청사 신축(총 200억원, 연부액 확정)</b>이 있다. 예산요구서를 작성한다.',
+  o:[
+   {t:'세입세출예산 요구서와 함께 계속비 요구서를 작성하고, 명시이월비·국고채무부담행위 해당 여부도 검토한다', v:'ok', f:'예산요구서는 세입세출예산·계속비·명시이월비·국고채무부담행위의 네 가지 요구서를 총칭합니다(제31조 제1항). 완성에 수년이 필요한 공사는 총액과 연부액을 정해 미리 국회 의결을 받는 계속비 대상입니다(제23조).', law:'국가재정법 제31조 제1항, 제23조', tag:'완전성 준수'},
+   {t:'세입세출예산 요구서만 제출한다. 나머지는 해당 사항이 없다', v:'bad', f:'다년도 공사를 단년도 세입세출예산으로만 요구하면 다음 연도 예산이 보장되지 않습니다. 계속비는 헌법 제55조와 국가재정법 제23조가 정한 제도이고, 요구서 구성 자체가 제31조에 열거되어 있습니다.', law:'국가재정법 제31조 제1항, 제23조', tag:'완전성 누락'},
+   {t:'계속비 대신 매년 단년도 예산으로 나누고, 계약은 장기계속계약으로 처리한다', v:'warn', f:'실무에서 널리 쓰이는 방식이라 위법은 아닙니다. 그러나 국회예산정책처는 계속비 제도가 장기계속계약과 총사업비관리로 우회되어 2022년 이후 계속비 편성이 전무하다는 점을 지적합니다. 국회 사전의결의 취지가 약해집니다.', law:'국가재정법 제23조, 제50조 / 국가계약법 제21조', tag:'사전의결 우회'}
+  ]},
+ {m:'5월', t:'대상지가 정해지지 않은 사업', role:'○○부 예산담당관',
+  s:'<b>재해위험지역 정비사업</b>을 요구해야 하는데, 대상 지구는 여름 우기 이후에야 확정된다. 세부내역을 미리 정할 수 없다.',
+  o:[
+   {t:'총액계상으로 요구하고, 예산 배정 전에 세부사업시행계획을 수립해 기획예산처장관과 협의한다', v:'ok', f:'세부내용을 미리 확정하기 곤란한 사업은 총액으로 계상할 수 있습니다(제37조 제1항). 대신 배정 전 세부사업시행계획 협의, 집행실적 제출, 국회 예결위 제출 의무가 따릅니다(제37조 제3·4항).', law:'국가재정법 제37조', tag:'명료성의 예외 활용'},
+   {t:'총액계상을 활용해 여러 사업을 묶어 순계의 5% 규모까지 늘려 요구한다', v:'bad', f:'총액계상사업의 총 규모는 매 회계연도 예산 순계의 일정 비율(시행령 3%)을 초과할 수 없습니다(제37조 제2항). 총액계상은 명료성 원칙의 예외이므로 한도가 붙어 있습니다.', law:'국가재정법 제37조 제2항', tag:'예외 한도 초과'},
+   {t:'대상지가 없으니 예비비로 처리해 달라고 요구한다', v:'bad', f:'예비비는 예측할 수 없는 예산 외 지출에 충당하는 것으로 일반회계 예산총액의 1% 이내에서 계상됩니다(제22조). 예산요구서 단계에서 부처가 요구하는 대상이 아니며, 우기마다 반복되는 정비사업은 예측 불가능한 지출이 아닙니다.', law:'국가재정법 제22조', tag:'제도 오용'}
+  ]},
+ {m:'6월', t:'지침 부적합 통보', role:'○○부 예산담당관',
+  s:'기획예산처가 ○○부 요구서 일부가 <b>편성지침에 부합하지 않는다</b>며 2주 내 수정·보완을 요구했다.',
+  o:[
+   {t:'기한 내에 수정·보완해 다시 제출한다', v:'ok', f:'지침에 부합하지 않는 요구서에 대해 기획예산처장관은 기한을 정해 수정·보완을 요구할 수 있습니다(제31조 제3항). 지침 시달은 법정 절차이므로 부처가 이를 무시하고 요구할 수는 없습니다.', law:'국가재정법 제31조 제3항', tag:'절차 준수'},
+   {t:'원안을 고수하고, 당정협의에서 여당을 통해 반영시키겠다', v:'warn', f:'당정협의는 여당의 예산 요구를 미리 수렴하는 창구이지 부처 요구를 관철하는 통로가 아닙니다. 지침에 맞지 않는 요구는 실무 편성에서 반영되지 않고, 국회 단계의 증액은 정부 동의가 필요합니다(헌법 제57조).', law:'국가재정법 제31조 제3항, 헌법 제57조', tag:'절차 무시'},
+   {t:'재정경제부 세제실에 협의를 요청해 조정한다', v:'bad', f:'예산·기금에 관한 사무는 기획예산처장관이 관장합니다(제11조 제1항). 재정경제부는 세제·국고·결산 소관이라 예산요구서 조정의 상대가 아닙니다. 2026년 개편 이후 가장 자주 나오는 조직 오류입니다.', law:'국가재정법 제11조 제1항', tag:'조직 오류'}
+  ]},
+ {m:'7월', t:'독립기관의 요구액을 줄여야 할 때', role:'기획예산처 예산실 사무관 (역할 전환)',
+  s:'<b>대법원</b>의 세출예산요구액이 가용재원을 크게 넘는다. 편성 실무안에서 감액이 필요하다.',
+  o:[
+   {t:'감액이 필요하면 국무회의에서 대법원장의 의견을 듣고, 감액 규모·이유·의견을 예산안 첨부서류로 국회에 제출한다', v:'ok', f:'독립기관 예산은 그 장의 의견을 최대한 존중해야 하고, 감액하려면 국무회의에서 의견을 들어야 하며(제40조 제1·2항), 감액 규모와 이유, 해당 기관장의 의견을 예산안에 첨부합니다(제34조 제11호). 감사원도 같습니다(제41조).', law:'국가재정법 제40조, 제41조, 제34조 제11호', tag:'독립기관 절차 준수'},
+   {t:'다른 부처와 똑같이 일률 감액한 뒤 결과를 통보한다', v:'bad', f:'국회·대법원·헌법재판소·중앙선거관리위원회는 독립기관입니다. 권력분립 원칙에 따라 의견 존중 의무와 국무회의 의견청취 절차가 별도로 규정되어 있습니다(제40조).', law:'국가재정법 제40조 제1·2항', tag:'독립기관 절차 위반'},
+   {t:'독립기관이므로 손댈 수 없다. 요구액을 전액 반영한다', v:'warn', f:'위법은 아니지만 감액이 금지된 것은 아닙니다. 절차를 지키면 감액할 수 있고, 가용재원을 넘는 요구를 그대로 두면 다른 부처 배분이 줄어듭니다. 독립성 존중과 재정 총량 관리는 함께 가야 합니다.', law:'국가재정법 제40조 제2항', tag:'총량 관리 소홀'}
+  ]},
+ {m:'5월 31일', t:'요구서를 어디에, 언제까지', role:'○○부 예산담당관',
+  s:'예산요구서 작성이 끝났다. <b>제출 상대와 기한</b>을 확인한다.',
+  o:[
+   {t:'기획예산처장관에게 5월 31일까지', v:'ok', f:'맞습니다. 2025년 10월 1일 개정으로 예산·기금 사무는 기획예산처장관이 관장하고(제11조), 예산요구서는 매년 5월 31일까지 기획예산처장관에게 제출합니다(제31조 제1항).', law:'국가재정법 제11조 제1항, 제31조 제1항', tag:'절차 준수'},
+   {t:'기획재정부장관에게 5월 31일까지', v:'bad', f:'기한은 맞지만 기관이 틀렸습니다. 기획재정부는 2026년 1월 2일 기획예산처와 재정경제부로 분리되었습니다. 교재·기출문제와 생성형 AI가 여전히 이렇게 답하는 시점 오류입니다.', law:'국가재정법 제11조 제1항 (2025.10.1. 개정)', tag:'시점 오류'},
+   {t:'재정경제부장관에게 6월 30일까지', v:'bad', f:'기관과 기한이 모두 틀렸습니다. 재정경제부는 결산·세제·국고 소관이고, 예산요구서 기한은 5월 31일입니다.', law:'국가재정법 제11조 제1항, 제31조 제1항', tag:'조직·기한 오류'}
+  ]}
+];
+const AREAS = [
+ {n:'절차와 시기', g:[1,5,7], tip:'편성 절차 8단계 표(슬라이드 8) — 1월 31일·3월 31일·5월 31일·120일 전, 지침 부적합 시 수정·보완 요구(제31조③)', okTip:'절차와 기한을 정확히 적용했습니다'},
+ {n:'예산 원칙', g:[2,3,4], tip:'2주차 온라인 예산의 원칙 표 — 한정성(지출한도), 완전성(요구서 4종), 사전의결(계속비), 명료성의 예외(총액계상)', okTip:'원칙과 예외의 관계를 이해하고 있습니다'},
+ {n:'조직체계', g:[5,6,7], tip:'2026년 개편 조직체계(슬라이드 6) — 예산·기금은 기획예산처, 결산·세제·국고는 재정경제부, 독립기관은 제40·41조', okTip:'개편 이후 기관별 역할을 구분하고 있습니다'},
+ {n:'통제장치', g:[1,2,4,6], tip:'편성 중 통제장치 표(슬라이드 11) — 예타 500억/300억, 총액계상 3% 한도, 지출한도, 독립기관 감액 절차', okTip:'편성 단계의 통제장치를 정확히 적용했습니다'},
+];
+const CK = [
+ ['조문 번호가 법령 원문과 일치하는가','law.go.kr 국가재정법 원문 대조'],
+ ['주체를 기획예산처장관으로 서술했는가','"기획재정부" 등장 시 시점 오류'],
+ ['기한(1월 31일·3월 31일·5월 31일·120일 전)이 정확한가','제28·29·31·33조'],
+ ['존재하지 않는 조문·항을 인용하지 않았는가','환각 여부'],
+ ['원칙(한정성·완전성·사전의결)과 연결해 설명했는가','2주차 온라인 예산의 원칙'],
+];
+let st = {i:-1, pick:Array(7).fill(null), ck:[0,0,0,0,0], memo:''};
+try{const s=JSON.parse(localStorage.getItem('w03sim')||'null'); if(s) st=Object.assign(st,s);}catch(e){}
+const save=()=>{try{localStorage.setItem('w03sim',JSON.stringify(st))}catch(e){}};
+const toast=m=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)};
+const V={ok:'통과',warn:'경고',bad:'오류'};
+
+function prog(){
+  document.getElementById('prog').innerHTML = GATES.map((g,i)=>{
+    const p=st.pick[i]; const c = p===null ? (i===st.i?'cur':'') : g.o[p].v;
+    return `<span class="${c}" title="핵심 절차 ${i+1}"></span>`;}).join('');
+}
+function show(){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));
+  if(st.i<0){document.getElementById('intro').classList.add('on');}
+  else if(st.i<7){document.getElementById('gate').classList.add('on'); renderGate();}
+  else {document.getElementById('result').classList.add('on'); renderResult();}
+  document.getElementById('prev').disabled = st.i<=0;
+  const n=document.getElementById('next');
+  n.disabled = st.i<0 || (st.i<7 && st.pick[st.i]===null);
+  n.textContent = st.i>=7 ? '완료' : (st.i===6 ? '결과 보기' : '다음');
+  prog(); window.scrollTo({top:0});
+}
+function renderGate(){
+  const g=GATES[st.i], p=st.pick[st.i];
+  document.getElementById('gate').innerHTML = `
+    <div class="step">핵심 절차 ${st.i+1} / 7 · ${g.m}</div>
+    <h2>${g.t}</h2>
+    <div class="role">역할 · ${g.role}</div>
+    <div class="card"><p class="sit" style="margin:0">${g.s}</p></div>
+    ${g.o.map((o,k)=>`<button class="opt ${p===null?'':(k===p?o.v:'')} " data-k="${k}" ${p!==null?'disabled':''}><span class="l">${'ABC'[k]}</span>${o.t}</button>`).join('')}
+    <div class="fb ${p===null?'':g.o[p].v}" id="fb">${p===null?'':`<b>${V[g.o[p].v]}</b> — ${g.o[p].f}<span class="law">근거: ${g.o[p].law}</span><span class="tag">${g.o[p].tag}</span>`}</div>
+    <p class="note">선택은 되돌릴 수 없습니다. 판정 뒤 근거 조문을 법령 원문으로 확인하세요.</p>`;
+  document.querySelectorAll('#gate .opt').forEach(b=>b.addEventListener('click',()=>{ st.pick[st.i]=+b.dataset.k; save(); show(); }));
+}
+function renderResult(){
+  const rows = GATES.map((g,i)=>{const o=g.o[st.pick[i]]; return {i,g,o};});
+  const n = v=>rows.filter(r=>r.o.v===v).length;
+  const bad = rows.filter(r=>r.o.v!=='ok');
+  document.getElementById('result').innerHTML = `
+    <div class="step">결과 리포트</div><h2>7개 핵심 절차 판정</h2>
+    <div class="score"><div><small>통과</small><b>${n('ok')}</b></div><div><small>경고</small><b>${n('warn')}</b></div><div><small>오류</small><b>${n('bad')}</b></div></div>
+    <div class="card res"><table><tr><th>절차</th><th>선택</th><th>판정</th><th>근거</th></tr>
+      ${rows.map(r=>`<tr><td>${r.i+1}</td><td>${'ABC'[st.pick[r.i]]}</td><td><span class="pill ${r.o.v}">${V[r.o.v]}</span><br><small style="color:var(--mute)">${r.o.tag}</small></td><td style="font-size:.76rem">${r.o.law}</td></tr>`).join('')}
+    </table></div>
+    <div class="card"><b style="font-size:.95rem">영역별 이해도와 복습 포인트</b>
+      <div class="res" style="margin-top:8px"><table><tr><th style="white-space:nowrap">영역</th><th style="white-space:nowrap">절차</th><th style="white-space:nowrap">진단</th><th>복습 포인트</th></tr>
+      ${AREAS.map(a=>{const vs=a.g.map(i=>rows[i-1].o.v); const st=vs.includes('bad')?'bad':vs.includes('warn')?'warn':'ok';
+        return `<tr><td><b>${a.n}</b></td><td>${a.g.join(', ')}</td><td><span class="pill ${st}">${{ok:'이해',warn:'보완',bad:'복습 필요'}[st]}</span></td><td style="font-size:.76rem">${st==='ok'?a.okTip:a.tip}</td></tr>`;}).join('')}
+      </table></div>
+      <p class="note">복습 포인트의 슬라이드 번호는 3주차 대면 PPT 기준입니다. '보완'은 위법은 아니나 원칙의 취지를 우회한 선택이 있었다는 뜻입니다.</p>
+    </div>
+    <div class="card"><b style="font-size:.95rem">과제 · AI 활동 — 오답 절차의 근거를 AI에 묻고 검증하기 (수업 후)</b>
+      ${bad.length? `<p class="sit" style="margin:8px 0">경고·오류 절차: <b>${bad.map(r=>r.i+1).join(', ')}</b>. 아래 프롬프트를 복사해 생성형 AI에 물은 뒤 답변을 법령 원문과 대조합니다.</p>`
+        : `<p class="sit" style="margin:8px 0">모든 절차를 통과했습니다. 아래 프롬프트는 핵심 절차 7의 오답 선택지 B를 대상으로 합니다.</p>`}
+      <div class="code" id="prompt">${bad.length ? bad.map(r=>`[핵심 절차 ${r.i+1}] 상황: ${r.g.s.replace(/<[^>]+>/g,'')}\n내 선택: "${r.o.t}"\n이 선택이 왜 부적절한지 설명하고, 근거가 되는 국가재정법 조문 번호와 조문 내용을 제시하라. 예산요구서를 제출받는 기관과 기한도 명시하라.`).join('\n\n') : `[핵심 절차 7] 예산요구서를 "기획재정부장관에게 5월 31일까지" 제출한다는 답이 왜 틀렸는지 설명하고, 근거가 되는 국가재정법 조문 번호와 조문 내용을 제시하라.`}</div>
+      <button class="btn sec" id="copyP">프롬프트 복사</button>
+      <div style="margin-top:12px"><b style="font-size:.9rem">검증 체크리스트</b><div id="ck"></div></div>
+      <p class="note">AI가 "기획재정부장관"이라고 답하면 시점 오류입니다. 개정 조문 원문을 붙여넣고 재질의한 뒤 답변이 바뀌는지 확인하세요.</p>
+    </div>
+    <div class="card"><b style="font-size:.9rem">AI 답변에서 발견한 오류와 수정 내역</b>
+      <textarea id="memo" placeholder="예) 핵심 절차 7: AI가 기획재정부장관·제31조로 답함(시점 오류). 제11조 개정 원문 제공 후 기획예산처장관으로 정정됨. 조문 번호는 정확.">${st.memo||''}</textarea></div>
+    <button class="btn" id="mkSum">제출용 요약 만들기</button>
+    <textarea id="sum" style="display:none;margin-top:10px"></textarea>
+    <button class="btn sec" id="copyS" style="display:none">요약 복사</button>
+    <button class="btn sec" id="reset" style="margin-top:14px">처음부터 다시</button>
+    <p class="note">업로드 3종 — ① 프롬프트 ② AI 답변 캡처(수정 전·후) ③ 이 요약</p>`;
+  const ck=document.getElementById('ck');
+  const rck=()=>{ck.innerHTML=CK.map((c,i)=>`<div class="cl"><button class="chk ${st.ck[i]?'on':''}" data-i="${i}"></button><div>${c[0]}<small>${c[1]}</small></div></div>`).join('');
+    ck.querySelectorAll('.chk').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i;st.ck[i]=st.ck[i]?0:1;save();rck();}));};
+  rck();
+  document.getElementById('memo').addEventListener('input',e=>{st.memo=e.target.value;save();});
+  document.getElementById('copyP').addEventListener('click',()=>copy(document.getElementById('prompt').textContent,'프롬프트를 복사했습니다'));
+  document.getElementById('mkSum').addEventListener('click',()=>{
+    const lines=['[3주차 예산편성 시뮬레이터 · 제출 요약]',
+      `판정: 통과 ${n('ok')} / 경고 ${n('warn')} / 오류 ${n('bad')}`,
+      ...rows.map(r=>`절차${r.i+1} ${'ABC'[st.pick[r.i]]} → ${V[r.o.v]} (${r.o.tag}) · ${r.o.law}`),
+      'AI 답변 검증 체크리스트:', ...CK.map((c,i)=>`  ${st.ck[i]?'☑':'☐'} ${c[0]}`),
+      '발견한 오류와 수정 내역:', '  '+(st.memo.trim()||'(작성 필요)').replace(/\n/g,'\n  ')];
+    const s=document.getElementById('sum'); s.value=lines.join('\n'); s.style.display='block';
+    document.getElementById('copyS').style.display='block';
+  });
+  document.getElementById('copyS').addEventListener('click',()=>copy(document.getElementById('sum').value,'요약을 복사했습니다'));
+  document.getElementById('reset').addEventListener('click',()=>{ if(confirm('모든 선택을 지우고 처음부터 시작할까요?')){st={i:-1,pick:Array(7).fill(null),ck:[0,0,0,0,0],memo:''};save();show();}});
+}
+async function copy(t,m){try{await navigator.clipboard.writeText(t);toast(m)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast(m)}}
+document.getElementById('start').addEventListener('click',()=>{st.i=0;save();show();});
+document.getElementById('prev').addEventListener('click',()=>{if(st.i>0){st.i--;save();show();}});
+document.getElementById('next').addEventListener('click',()=>{if(st.i<7){st.i++;save();show();}else toast('수고했습니다. 요약을 게시판에 올리세요');});
+show();
+</script>
+</body>
+</html>
