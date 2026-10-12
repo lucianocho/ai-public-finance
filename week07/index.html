@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>7주차 실습 · 사업설명서는 무엇을 말하는가</title>
+<style>
+  :root{--navy:#002F8E;--blue:#0F70C6;--sky:#E8F0FB;--ink:#1A2233;--mute:#61708A;--line:#D6DEEA;--bg:#F4F6FA;--card:#fff;
+        --red:#C8321E;--green:#1E7B4E;--amber:#A8660A}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:96px;
+       font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
+  header{background:var(--navy);color:#fff;padding:18px 18px 14px}
+  header .k{font-size:.75rem;letter-spacing:.06em;color:#9DB8E8}
+  header h1{margin:4px 0 0;font-size:1.15rem;font-weight:700;line-height:1.3}
+  header p{margin:6px 0 0;font-size:.82rem;color:#C9D8F2}
+  .prog{display:flex;gap:4px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  .prog span{flex:1;height:6px;border-radius:3px;background:#DDE3EC}
+  .prog span.done{background:var(--green)}.prog span.cur{background:var(--blue)}
+  main{padding:16px 14px}
+  .step{font-size:.75rem;color:var(--mute);letter-spacing:.04em}
+  h2{font-size:1.05rem;margin:2px 0 8px;color:var(--navy)}
+  h3{font-size:.92rem;margin:14px 0 6px;color:var(--navy)}
+  .role{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--sky);color:var(--navy);margin-bottom:8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  .sit{font-size:.9rem}.sit b{color:var(--navy)}
+  .warnbox{background:#FBF1E2;border:1px solid #E5C48A;color:#5C3A05;border-radius:10px;padding:10px 12px;font-size:.84rem;margin-bottom:10px}
+  .okbox{background:#E6F4EC;border:1px solid #9FD3B4;color:#164A2E;border-radius:10px;padding:10px 12px;font-size:.84rem;margin-bottom:10px}
+  .badbox{background:#FCEBE8;border:1px solid #F0B3A8;color:#6E1C11;border-radius:10px;padding:10px 12px;font-size:.84rem;margin-bottom:10px}
+  .infobox{background:var(--sky);border:1px solid #BFD2F0;color:#163A75;border-radius:10px;padding:10px 12px;font-size:.84rem;margin-bottom:10px}
+  .doc{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+  .doc .h{display:flex;justify-content:space-between;font-size:.86rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+  .doc .h small{font-weight:400;color:var(--mute)}
+  .doc .tx{font-size:.88rem;line-height:1.6;background:#FAFBFD;border-left:3px solid var(--line);padding:8px 10px;border-radius:0 8px 8px 0}
+  .doc .tx mark{background:#FFE9A8;padding:0 2px;border-radius:2px}
+  mark.k1{background:#FFD6D6}mark.k2{background:#D6E6FF}mark.k3{background:#E2F5DC}mark.k4{background:#EEE2FF}mark.k5{background:#FFE9A8}mark.k6{background:#FFD9B8}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tg{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 10px;font:inherit;font-size:.78rem;color:var(--ink)}
+  .tg.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .str{display:flex;gap:6px;align-items:center;margin-top:8px;font-size:.78rem;color:var(--mute)}
+  .str button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:.8rem}
+  .str button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .done{font-size:.78rem;color:var(--green);font-weight:700}
+  .res table{width:100%;border-collapse:collapse;font-size:.8rem}
+  .res th,.res td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+  .res th{color:var(--mute);font-weight:600;font-size:.72rem;white-space:nowrap}
+  .res tr.hi td{background:#FFF8E6}
+  .pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:.7rem;font-weight:700;white-space:nowrap}
+  .pill.ok{background:#E6F4EC;color:var(--green)}.pill.warn{background:#FBF1E2;color:var(--amber)}.pill.bad{background:#FCEBE8;color:var(--red)}.pill.nb{background:#EEF1F6;color:var(--mute)}
+  .score{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+  .score div{background:var(--sky);border-radius:10px;padding:10px;text-align:center}
+  .score small{display:block;font-size:.68rem;color:var(--mute)}.score b{font-size:1.25rem;color:var(--navy)}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;font-size:.74rem;margin:6px 0}
+  .legend span{padding:2px 8px;border-radius:6px}
+  .btn{display:block;width:100%;border:0;border-radius:10px;padding:13px;font:inherit;font-size:.95rem;font-weight:700;background:var(--navy);color:#fff;margin-top:10px}
+  .btn.sec{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn:disabled{opacity:.4}
+  textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:.8rem;line-height:1.5}
+  .note{font-size:.78rem;color:var(--mute);margin:10px 0 0}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:8px;z-index:6;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  .bar button{flex:1;border-radius:10px;padding:12px;font:inherit;font-weight:700;border:1.5px solid var(--navy);background:#fff;color:var(--navy)}
+  .bar button.pri{background:var(--navy);color:#fff}.bar button:disabled{opacity:.35}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1A2233;color:#fff;padding:9px 14px;border-radius:8px;font-size:.82rem;opacity:0;pointer-events:none;transition:.2s;z-index:9}
+  .toast.show{opacity:1}
+  section{display:none}section.on{display:block}
+  ul.tight{margin:6px 0 0 18px;padding:0;font-size:.84rem}ul.tight li{margin:3px 0}
+  details{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0;background:#fff}
+  summary{font-size:.86rem;font-weight:700;color:var(--navy);cursor:pointer}
+  .cnt{position:sticky;top:30px;z-index:4;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:.84rem;display:flex;justify-content:space-between}
+  .cnt b{color:var(--navy)}
+</style>
+</head>
+<body>
+<header>
+  <div class="k">AI와 공공재정관리 · 7주차 대면 실습</div>
+  <h1>사업설명서는 무엇을 말하는가</h1>
+  <p>6주차의 △△부 20개 사업에는 각각 "사업 필요성" 문단이 붙어 있습니다. 같은 글을 사람·규칙·AI 세 가지 방법으로 읽고, 글이 쓰는 설득의 전략을 분류한 뒤 셋이 어디서 갈리는지 봅니다.</p>
+</header>
+<div class="prog" id="prog"></div>
+<main>
+
+<!-- ① 내 라벨 -->
+<section id="s1" class="on">
+  <div class="step">① 내가 읽기</div>
+  <h2>이 문단은 어떤 전략으로 설득하는가</h2>
+  <span class="role">역할 · 기획예산처 예산실 사무관</span>
+  <div class="card sit">
+    5월 31일 △△부가 제출한 예산요구서에서 사업별 "필요성" 문단 20개를 뽑았습니다. 각 문단이 <b>어떤 전략</b>으로 예산을 설득하려 하는지 하나 고르고, <b>설득의 강도</b>(1 담담 ~ 3 강함)를 매기십시오. 정답을 맞히는 문제가 아니라, 나중에 규칙과 AI가 읽은 결과와 비교할 <b>내 기준</b>을 남기는 단계입니다.
+  </div>
+  <div class="infobox"><b>여섯 전략 + 없음</b> — 3주차 온라인의 "부처의 전략"입니다.<br>
+   <b>위기 활용</b> 재해·위험·시급성을 앞세움 / <b>아젠다 편승</b> 국정과제·대통령 지시에 기댐 / <b>살라미</b> 작게 시작해 뒤에 키움 / <b>기득권 유지</b> 지속·전년 수준을 당연시 / <b>끼워넣기</b> 다른 사업과 묶어 정당화 / <b>워싱턴 기념비</b> 삭감하면 가장 아픈 피해를 경고 / <b>없음</b> 사실·법령·실적만 서술</div>
+  <div class="cnt"><span>라벨링 완료</span><b id="cnt1">0 / 20</b></div>
+  <div id="docs1"></div>
+  <button class="btn" id="lock1">내 라벨 확정</button>
+</section>
+
+<!-- ② 규칙 기반 -->
+<section id="s2">
+  <div class="step">② 규칙으로 읽기</div>
+  <h2>단어 사전으로 세어 보기</h2>
+  <div class="card sit">
+    가장 단순한 텍스트 분석입니다. 전략마다 <b>단어 사전</b>을 만들고, 문단에 그 단어가 몇 번 나오는지 셉니다. 가장 많이 걸린 전략이 그 문단의 라벨, 걸린 단어의 총수가 설득 강도입니다. 사람이 아니라 <b>규칙</b>이 읽은 결과입니다.
+  </div>
+  <div class="infobox"><b>지금 보는 것</b> — 아래 문단에서 사전에 걸린 단어가 색으로 표시됩니다. 같은 문단을 ①에서 여러분이 어떻게 읽었는지와 나란히 놓았습니다. 규칙은 빠르고 투명하지만, <b>단어가 있다고 그 전략이라고 단정</b>합니다. "긴급"이라고 썼는데 정말 긴급한 사업(5번)과, "긴급"이라고 썼지만 성과가 미흡한 사업(19번)을 규칙은 구별하지 못합니다.</div>
+  <div class="legend" id="legend"></div>
+  <details><summary>단어 사전 보기</summary><div id="dict" class="res"></div></details>
+  <div id="rule"></div>
+</section>
+
+<!-- ③ AI -->
+<section id="s3">
+  <div class="step">③ AI로 읽기</div>
+  <h2>생성형 AI에게 같은 문단을 분류시키기</h2>
+  <div class="card sit">
+    아래 프롬프트에는 전략의 정의와 20개 문단이 모두 들어 있습니다. 복사해 AI 앱에 붙여넣고, 답변에서 <b>"번호: 전략"</b> 줄을 그대로 복사해 아래 칸에 붙여넣으십시오. AI가 없거나 시간이 부족하면 [건너뛰기]로 넘어갈 수 있습니다.
+  </div>
+  <div class="card">
+    <div class="step">프롬프트</div>
+    <textarea id="aiprompt" readonly style="min-height:90px;font-size:.74rem"></textarea>
+    <button class="btn sec" id="copyP">프롬프트 복사</button>
+  </div>
+  <div class="card">
+    <div class="step">AI 답변 붙여넣기 (번호: 전략 형식, 20줄)</div>
+    <textarea id="aiin" placeholder="예)&#10;1: 아젠다 편승&#10;2: 기득권 유지&#10;3: 없음&#10;..."></textarea>
+    <button class="btn" id="aiparse">AI 라벨 읽어 들이기</button>
+    <button class="btn sec" id="aiskip">AI 없이 건너뛰기</button>
+    <p class="note" id="aimsg"></p>
+  </div>
+  <div id="aires"></div>
+</section>
+
+<!-- ④ 제출 -->
+<section id="s4">
+  <div class="step">④ 제출</div>
+  <h2>세 독자는 어디서 갈렸는가</h2>
+  <div id="final"></div>
+  <div class="card">
+    <div class="step">발견한 것 (자유 서술)</div>
+    <textarea id="memo" placeholder="내 라벨·규칙·AI가 가장 크게 갈린 문단 하나를 골라 누가 왜 그렇게 읽었는지 적으십시오. 설득의 강도가 센 문단이 실제로 더 필요한 사업이었는지(6주차 점수표와 대조)도 적습니다."></textarea>
+    <button class="btn" id="makeSum">제출용 요약 만들기</button>
+    <textarea id="sum" style="display:none;margin-top:10px;min-height:260px"></textarea>
+    <button class="btn sec" id="copyS" style="display:none">요약 복사</button>
+    <p class="note">업로드 3종 — ① 이 요약 ② AI 답변 캡처 ③ 불일치 문단 1건에 대해 AI에 "근거를 대라"고 재질의한 캡처(과제)</p>
+  </div>
+  <button class="btn sec" id="reset">처음부터 다시</button>
+</section>
+</main>
+
+<div class="bar"><button id="prev">이전</button><button id="next" class="pri">다음</button></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- 전략과 사전 ---------- */
+const TAGS=['위기 활용','아젠다 편승','살라미','기득권 유지','끼워넣기','워싱턴 기념비','없음'];
+const DICT={
+ '위기 활용':['긴급','시급','재난','위기','위험','골든타임','더 이상 미룰','안전사고','피해'],
+ '아젠다 편승':['국정과제','핵심 아젠다','대통령','국가재정전략','국정 기조','정부 기조','국정철학'],
+ '살라미':['시범','1단계','2단계','3단계','우선 착수','향후 확대','단계적','선도'],
+ '기득권 유지':['지속','계속','안정적 운영','전년 수준','전년도와 같','기존','정책 신뢰'],
+ '끼워넣기':['연계','병행','함께','패키지','묶어','동반','부수'],
+ '워싱턴 기념비':['중단 시','중단될','폐지 시','직접 피해','국민 불편','직격탄','반발','되돌릴 수 없']};
+const KCLS={'위기 활용':'k1','아젠다 편승':'k2','살라미':'k3','기득권 유지':'k4','끼워넣기':'k5','워싱턴 기념비':'k6'};
+/* id, 사업, 요구액, 필요성 문단, 설계상 전략(피드백용), 6주차 효과성 점수 */
+const DOCS=[
+ [1,'청년 취업지원 바우처',150,'청년 고용은 국정과제의 핵심 아젠다이며 대통령 업무보고에서도 최우선 과제로 지시된 바 있다. 본 사업은 국정 기조에 직접 부합하는 사업으로, 3년차 계속사업의 안정적 운영을 위해 전년 수준 이상의 예산이 필요하다.','아젠다 편승',3],
+ [2,'농촌 하천 정비 2단계',180,'본 사업은 국회가 계속비로 의결한 3년 공사의 마지막 연도이며, 올해 준공을 앞두고 있다. 예산이 중단될 경우 2년간 투입된 공사가 되돌릴 수 없는 상태로 방치되어 주민 직접 피해와 반발이 예상된다.','워싱턴 기념비',3],
+ [3,'재난 피해 주민 생계지원금',110,'재해구호법 및 관련 시행령에 따라 재난 피해 주민에게 지급하는 생계지원금이다. 지급 단가와 대상은 법령으로 정해져 있으며, 전년도 피해 가구 수와 최근 5년 평균을 기준으로 소요를 산정하였다.','없음',2],
+ [4,'소도시 빈집 정비',60,'인구 감소 지역의 빈집 문제에 대응하기 위해 3개 군에서 시범사업으로 우선 착수하고, 성과를 바탕으로 향후 전국으로 단계적 확대를 추진한다. 올해는 1단계로 철거·정비 60억원을 요구한다.','살라미',2],
+ [5,'노후 교량 안전보수',130,'정기 점검 결과 C등급 이하로 판정된 교량 14개소의 보수 사업이다. 보수가 지연될 경우 통행 제한 또는 안전사고 위험이 있어 시급한 조치가 필요하며, 긴급 보수가 필요한 3개소는 상반기 착공이 불가피하다.','위기 활용',4],
+ [6,'청년 창업 공유오피스 신축',90,'예비타당성조사를 통과한 신규사업으로, 청년 창업 활성화라는 국정과제에 부합한다. 올해는 설계와 1단계 착공을 우선 추진하고 향후 입주 수요에 따라 2단계 확장을 검토한다.','살라미',3],
+ [7,'지역 축제 지원',40,'지역 축제는 관광객 유치와 농산물 직거래, 지역 상권 활성화를 함께 이끄는 사업으로, 관광 진흥 사업과 연계하여 추진 시 효과가 배가된다. 축제 기간 방문객은 전년 대비 12% 증가하였다.','끼워넣기',2],
+ [8,'긴급 복지 지원금',70,'긴급복지지원법에 따라 위기 상황에 처한 가구에 생계·의료·주거비를 지원한다. 수요는 경기 상황에 따라 변동하므로 최근 3년 집행 실적의 평균에 물가 상승률을 반영하여 산정하였다.','없음',2],
+ [9,'산불 감시 드론 도입',35,'최근 봄철 대형 산불이 연이어 발생하여 초기 대응의 골든타임 확보가 시급한 과제가 되었다. 감시 드론 도입이 지연될 경우 산림과 인명 피해가 확대될 위험이 있어 올해 도입이 필요하다.','위기 활용',3],
+ [10,'고령자 교통안전 시설',55,'고령 보행자 사고 다발 구간 28곳에 시설을 개선한 결과 해당 구간 사고가 32% 감소하였다. 올해는 추가 22곳을 대상으로 하며, 개소당 단가는 전년 실적을 기준으로 산정하였다.','없음',4],
+ [11,'균형발전 연구용역',15,'지역 격차 해소는 국정과제이자 국가재정전략회의에서 제시된 핵심 아젠다이다. 본 연구용역은 국정과제 이행을 뒷받침할 지표 개발을 목적으로 하며, 관련 부처 정책과 연계하여 활용된다.','아젠다 편승',2],
+ [12,'도심 침수 예방 배수펌프장 증설',160,'최근 3년간 집중호우로 반복된 도심 침수 피해 지역에 배수펌프장 2곳을 증설한다. 기후 변화로 피해 규모가 커지고 있어 더 이상 미룰 수 없는 사업이며, 토지 보상은 상반기 완료 예정이다.','위기 활용',4],
+ [13,'청소년 디지털 교육센터 운영',45,'청소년 디지털 교육센터는 개소 이후 지속 운영 중인 시설로, 안정적 운영을 위해 전년 수준의 운영비가 필요하다. 기존 프로그램을 유지하면서 신규 과정을 일부 추가할 계획이다.','기득권 유지',3],
+ [14,'전통시장 시설 현대화',80,'아케이드 설치와 함께 주차장 확충을 병행하여 추진하며, 상권 활성화 사업과 연계할 경우 방문객 편의와 매출 증대를 동시에 기대할 수 있다. 시설 개선과 홍보 사업을 패키지로 추진한다.','끼워넣기',2],
+ [15,'재난대응 통합관제 고도화',65,'1단계 구축이 완료된 통합관제시스템의 2단계 고도화 사업이다. 올해 2단계를 완료하고 3단계 확장은 2028년 이후 단계적으로 추진할 예정이며, 1단계 투자의 효과를 살리기 위해 연속 추진이 필요하다.','살라미',4],
+ [16,'귀농귀촌 정착 지원',50,'귀농귀촌 정착 지원은 10년 이상 지속 추진해 온 사업으로, 중단 시 정책 신뢰가 훼손될 우려가 있다. 기존 지원 체계를 유지하면서 전년 수준으로 계속 추진한다.','기득권 유지',2],
+ [17,'지역 공공의료 인력 장학금',30,'의료 취약지의 공공의료 인력 확보는 국정과제이며, 지역 의료 격차 해소라는 국가재정전략회의 아젠다와 직결된다. 취약지 근무를 조건으로 장학금을 지급하여 인력 유입을 유도한다.','아젠다 편승',3],
+ [18,'폐광지역 관광 활성화',70,'폐광지역은 대체 산업이 없어 관광시설 조성이 유일한 활로이다. 사업이 중단될 경우 지역 경제에 직격탄이 되며 주민 반발과 국민 불편이 예상되므로, 집행 지연과 무관하게 예산 유지가 필요하다.','워싱턴 기념비',2],
+ [19,'공공 와이파이 확충',25,'디지털 격차 해소는 국정과제이며 시급한 민생 과제이다. 공공 와이파이는 국민 모두가 체감하는 필수 서비스로, 확충이 지연될 경우 정보 취약계층의 피해가 우려된다. 국정 기조에 부합하는 사업으로 지속 추진이 필요하다.','아젠다 편승',1],
+ [20,'홍보·공공캠페인',20,'부처의 모든 정책 사업과 연계하여 국민 인지도를 높이는 사업으로, 개별 사업의 성과를 함께 끌어올리는 부수 효과가 있다. 주요 사업 홍보를 패키지로 묶어 추진한다.','끼워넣기',1]];
+
+/* ---------- 상태 ---------- */
+const KEY='w07v1';
+let state=load()||{step:0,my:{},str:{},locked:false,ai:null,aiSkipped:false,memo:''};
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const $=id=>document.getElementById(id);
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)};
+async function copy(t,m){try{await navigator.clipboard.writeText(t);toast(m)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast(m)}}
+
+/* ---------- 규칙 기반 ---------- */
+function ruleRead(text){
+  const hits={};let total=0;
+  for(const t of TAGS.slice(0,6)){hits[t]=0;for(const w of DICT[t]){const n=text.split(w).length-1;hits[t]+=n;total+=n;}}
+  let best='없음',max=0;for(const t of TAGS.slice(0,6)){if(hits[t]>max){max=hits[t];best=t}}
+  const strength=total===0?1:total<=2?1:total<=4?2:3;
+  return {tag:best,hits,total,strength};
+}
+function highlight(text){
+  let out=text;const marks=[];
+  for(const t of TAGS.slice(0,6))for(const w of DICT[t])marks.push([w,KCLS[t]]);
+  marks.sort((a,b)=>b[0].length-a[0].length);
+  // 토큰 치환 (중첩 방지)
+  const segs=[{s:text,m:null}];
+  for(const [w,c] of marks){
+    for(let i=0;i<segs.length;i++){const sg=segs[i];if(sg.m)continue;const idx=sg.s.indexOf(w);if(idx<0)continue;
+      const rep=[{s:sg.s.slice(0,idx),m:null},{s:w,m:c},{s:sg.s.slice(idx+w.length),m:null}];segs.splice(i,1,...rep);i+=1;}
+  }
+  return segs.map(sg=>sg.m?`<mark class="${sg.m}">${sg.s}</mark>`:sg.s).join('');
+}
+const RULE=DOCS.map(d=>ruleRead(d[3]));
+
+/* ---------- 진행 ---------- */
+function prog(){$('prog').innerHTML=[0,1,2,3].map(i=>`<span class="${i<state.step?'done':i===state.step?'cur':''}"></span>`).join('')}
+function show(){
+  document.querySelectorAll('section').forEach((s,i)=>s.classList.toggle('on',i===state.step));
+  prog();$('prev').disabled=state.step===0;
+  const n=$('next');n.textContent=state.step===3?'완료':'다음';
+  n.disabled=(state.step===0&&!state.locked)||(state.step===2&&!state.ai&&!state.aiSkipped)||state.step===3;
+  window.scrollTo({top:0});
+  if(state.step===1)renderRule(); if(state.step===2)renderAI(); if(state.step===3)renderFinal();
+  save();
+}
+$('prev').onclick=()=>{if(state.step>0){state.step--;show()}};
+$('next').onclick=()=>{if(state.step<3){state.step++;show()}};
+
+/* ---------- ① ---------- */
+function renderDocs(){
+  $('docs1').innerHTML=DOCS.map(d=>{const id=d[0];const my=state.my[id],st=state.str[id];
+    return `<div class="doc" data-id="${id}"><div class="h"><span>${id}. ${d[1]} <small>· ${d[2]}억</small></span>${my&&st?'<span class="done">완료</span>':''}</div>
+    <div class="tx">${d[3]}</div>
+    <div class="tags">${TAGS.map(t=>`<button class="tg ${my===t?'on':''}" data-t="${t}">${t}</button>`).join('')}</div>
+    <div class="str">강도 ${[1,2,3].map(v=>`<button class="${st===v?'on':''}" data-v="${v}">${v}</button>`).join('')}<span>1 담담 · 3 강함</span></div></div>`}).join('');
+  if(!state.locked){
+    $('docs1').querySelectorAll('.tg').forEach(b=>b.onclick=()=>{const id=+b.closest('.doc').dataset.id;state.my[id]=b.dataset.t;save();renderDocs();});
+    $('docs1').querySelectorAll('.str button').forEach(b=>b.onclick=()=>{const id=+b.closest('.doc').dataset.id;state.str[id]=+b.dataset.v;save();renderDocs();});
+  }else{$('docs1').querySelectorAll('button').forEach(b=>b.disabled=true);}
+  const n=DOCS.filter(d=>state.my[d[0]]&&state.str[d[0]]).length;
+  $('cnt1').textContent=`${n} / 20`;
+  $('lock1').disabled=state.locked||n<20;$('lock1').textContent=state.locked?'내 라벨 확정됨':(n<20?`${20-n}개 남았습니다`:'내 라벨 확정');
+}
+$('lock1').onclick=()=>{state.locked=true;save();renderDocs();show();toast('내 라벨이 확정되었습니다')};
+
+/* ---------- ② ---------- */
+function renderRule(){
+  $('legend').innerHTML=TAGS.slice(0,6).map(t=>`<span class="${KCLS[t]}" style="background:var(--sky)"><mark class="${KCLS[t]}">■</mark> ${t}</span>`).join('');
+  $('dict').innerHTML='<table>'+TAGS.slice(0,6).map(t=>`<tr><td><b>${t}</b></td><td>${DICT[t].join(', ')}</td></tr>`).join('')+'</table>';
+  const agree=DOCS.filter(d=>state.my[d[0]]===RULE[d[0]-1].tag).length;
+  const strDiff=DOCS.filter(d=>Math.abs((state.str[d[0]]||1)-RULE[d[0]-1].strength)>=2).map(d=>d[0]);
+  let h=`<div class="card res"><div class="score"><div><small>내 라벨 = 규칙 라벨</small><b>${agree}/20</b></div><div><small>강도 2단계 이상 차이</small><b>${strDiff.length}개</b></div><div><small>규칙이 "없음"으로 읽은 문단</small><b>${RULE.filter(r=>r.tag==='없음').length}개</b></div></div>
+   <table><tr><th>사업</th><th>내 라벨 · 강도</th><th>규칙 라벨 · 강도</th><th>걸린 단어</th></tr>${DOCS.map(d=>{const r=RULE[d[0]-1];const hi=state.my[d[0]]!==r.tag;
+    return `<tr class="${hi?'hi':''}"><td>${d[0]}. ${d[1]}</td><td>${state.my[d[0]]} · ${state.str[d[0]]}</td><td>${r.tag} · ${r.strength}</td><td>${r.total}</td></tr>`}).join('')}</table>
+   <p class="note">노란 행 = 사람과 규칙이 다르게 읽은 문단. 규칙은 "가장 많이 걸린 사전"을 고를 뿐, 문맥을 읽지 않습니다.</p></div>`;
+  // 함정 피드백
+  const r5=RULE[4],r19=RULE[18],r3=RULE[2];
+  h+=`<div class="warnbox"><b>5번과 19번을 나란히 보십시오.</b> 규칙은 5번(교량 보수)을 "${r5.tag}"로, 19번(공공 와이파이)을 "${r19.tag}"로 읽었습니다. 5번은 C등급 교량이라는 <b>실체</b>가 있고, 19번은 성과평가 "미흡" 사업인데 설명서만 강합니다(6주차 효과성 점수 5번 4점 / 19번 1점). <b>수사의 강도와 사업의 필요성은 다른 것</b>입니다. 규칙은 이 둘을 구별하지 못합니다. 여러분은 구별했습니까?</div>`;
+  const r8=RULE[7];
+  if(r3.tag==='없음'&&r8.tag==='없음')h+=`<div class="infobox"><b>3번·8번(법령상 의무지출)</b>은 규칙이 "없음"으로 읽었습니다. 설득할 필요가 없는 사업은 담담하게 쓰입니다. 3주차 온라인에서 본 옹호자 전략이 가장 약하게 나타나는 곳이 의무지출이라는 점을 확인하십시오.</div>`;
+  else h+=`<div class="badbox"><b>3번·8번(법령상 의무지출)을 규칙은 "${r3.tag}" / "${r8.tag}"로 읽었습니다.</b> 문단을 다시 보십시오. "재난", "위기 상황"은 설득이 아니라 <b>법령 이름과 지급 요건</b> 안에 있는 단어입니다. 단어는 있으나 설득은 없는 문단 — 규칙 기반 분석의 한계가 가장 선명하게 드러나는 사례입니다. 여러분은 이 두 문단을 어떻게 읽었습니까?</div>`;
+  h+=`<h3>문단별 보기 — 사전에 걸린 단어</h3>`+DOCS.map(d=>`<div class="doc"><div class="h"><span>${d[0]}. ${d[1]}</span><small>내 ${state.my[d[0]]} / 규칙 ${RULE[d[0]-1].tag}</small></div><div class="tx">${highlight(d[3])}</div></div>`).join('');
+  $('rule').innerHTML=h;
+}
+
+/* ---------- ③ ---------- */
+function buildPrompt(){
+  return `아래는 어느 정부 부처가 제출한 예산요구서의 사업별 "필요성" 문단 20개다. 각 문단이 예산을 설득하기 위해 쓰는 전략을 다음 일곱 가지 중 하나로 분류하라.
+- 위기 활용: 재해·위험·시급성을 앞세움
+- 아젠다 편승: 국정과제·대통령 지시·국가 전략에 기댐
+- 살라미: 작게 시작해 뒤에 확대하겠다고 함
+- 기득권 유지: 지속·전년 수준을 당연시함
+- 끼워넣기: 다른 사업과 묶어 정당화함
+- 워싱턴 기념비: 삭감하면 가장 아픈 피해가 생긴다고 경고함
+- 없음: 사실·법령·실적만 서술함
+결과는 반드시 "번호: 전략" 형식으로 한 줄에 하나씩, 20줄만 출력하라. 설명은 붙이지 말라.
+
+`+DOCS.map(d=>`${d[0]}. ${d[3]}`).join('\n');
+}
+$('aiprompt').value=buildPrompt();
+$('copyP').onclick=()=>copy($('aiprompt').value,'프롬프트를 복사했습니다');
+function parseAI(txt){
+  const out={};const norm=s=>s.replace(/\s/g,'');
+  txt.split(/\n/).forEach(line=>{const m=line.match(/(\d{1,2})\s*[:.)：]\s*(.+)/);if(!m)return;const id=+m[1];if(id<1||id>20)return;const v=norm(m[2]);
+    for(const t of TAGS){if(v.includes(norm(t))){out[id]=t;break}}
+    if(!out[id]){if(/위기|긴급|시급/.test(v))out[id]='위기 활용';else if(/아젠다|국정/.test(v))out[id]='아젠다 편승';else if(/살라미|단계/.test(v))out[id]='살라미';else if(/기득|유지/.test(v))out[id]='기득권 유지';else if(/끼워|연계/.test(v))out[id]='끼워넣기';else if(/워싱턴|기념비/.test(v))out[id]='워싱턴 기념비';else if(/없음|사실/.test(v))out[id]='없음';}
+  });
+  return out;
+}
+$('aiparse').onclick=()=>{const o=parseAI($('aiin').value);const n=Object.keys(o).length;
+  if(n<15){$('aimsg').textContent=`${n}개만 읽혔습니다. "번호: 전략" 형식인지 확인하십시오 (최소 15개).`;return}
+  state.ai=o;state.aiSkipped=false;save();$('aimsg').textContent=`${n}개 라벨을 읽었습니다.`;renderAI();show();};
+$('aiskip').onclick=()=>{if(confirm('AI 단계를 건너뛰면 내 라벨과 규칙 라벨만 비교합니다. 계속할까요?')){state.aiSkipped=true;state.ai=null;save();show();}};
+function renderAI(){
+  if(!state.ai){$('aires').innerHTML='';return}
+  const A=state.ai;const ids=DOCS.map(d=>d[0]).filter(id=>A[id]);
+  const agMA=ids.filter(id=>state.my[id]===A[id]).length, agRA=ids.filter(id=>RULE[id-1].tag===A[id]).length, agMR=DOCS.filter(d=>state.my[d[0]]===RULE[d[0]-1].tag).length;
+  const all3=ids.filter(id=>state.my[id]===A[id]&&A[id]===RULE[id-1].tag).length;
+  const dis=ids.filter(id=>!(state.my[id]===A[id]&&A[id]===RULE[id-1].tag));
+  $('aires').innerHTML=`<div class="card res"><div class="score"><div><small>내 = AI</small><b>${agMA}/${ids.length}</b></div><div><small>규칙 = AI</small><b>${agRA}/${ids.length}</b></div><div><small>셋 모두 일치</small><b>${all3}/${ids.length}</b></div></div>
+   <table><tr><th>사업</th><th>나</th><th>규칙</th><th>AI</th></tr>${DOCS.map(d=>{const id=d[0];const hi=!(state.my[id]===A[id]&&A[id]===RULE[id-1].tag);
+     return `<tr class="${hi?'hi':''}"><td>${id}. ${d[1]}</td><td>${state.my[id]}</td><td>${RULE[id-1].tag}</td><td>${A[id]||'—'}</td></tr>`}).join('')}</table>
+   <p class="note">노란 행 = 세 독자가 완전히 일치하지 않은 문단 ${dis.length}개. 셋이 갈린 문단일수록 "정답"이 아니라 "기준"의 문제입니다.</p></div>
+   <div class="infobox"><b>AI는 왜 그렇게 읽었는가</b> — AI는 사전을 세지 않고 문맥을 읽습니다. 그래서 규칙보다 사람에 가까운 경우가 많지만, <b>근거를 묻기 전에는 왜 그 라벨인지 알 수 없습니다</b>. 과제에서 불일치 문단 하나를 골라 "어느 표현 때문에 그렇게 분류했는가"를 재질의하십시오. 근거가 문단에 실제로 있는 표현인지(환각 여부)를 확인하는 것이 검증입니다.</div>
+   ${A[19]&&A[19]!=='없음'?`<div class="warnbox">AI도 19번(공공 와이파이)을 "${A[19]}"로 읽었습니다. 문단만 보면 그게 맞습니다. 그런데 이 사업은 성과평가 "미흡"입니다. <b>텍스트 분류는 글이 무엇을 주장하는지를 알려 주지, 주장이 사실인지를 알려 주지 않습니다.</b> 6주차 점수표와 7주차 라벨을 함께 봐야 하는 이유입니다.</div>`:''}`;
+}
+
+/* ---------- ④ ---------- */
+function renderFinal(){
+  const agMR=DOCS.filter(d=>state.my[d[0]]===RULE[d[0]-1].tag).length;
+  const A=state.ai;const ids=A?DOCS.map(d=>d[0]).filter(id=>A[id]):[];
+  const agMA=A?ids.filter(id=>state.my[id]===A[id]).length:null;
+  const trap5=state.my[5]==='위기 활용', trap19=(state.str[19]||0)>=2, trap3=state.my[3]==='없음'&&state.my[8]==='없음';
+  const strongButWeak=DOCS.filter(d=>(state.str[d[0]]||0)>=3&&d[5]<=2).map(d=>d[0]);
+  const rows=[
+   ['나와 규칙의 일치',agMR>=14?'높음':agMR>=10?'보통':'낮음',`${agMR}/20 — ${agMR>=14?'단어가 전략을 잘 드러내는 문단이 많았음':'규칙이 놓친 문맥을 내가 읽었거나, 내가 단어에 끌려갔거나'}`],
+   A?['나와 AI의 일치',agMA>=15?'높음':agMA>=11?'보통':'낮음',`${agMA}/${ids.length}`]:['나와 AI의 일치','건너뜀','AI 단계를 건너뛰었음 — 과제에서 수행'],
+   ['수사와 실체의 구분',(trap5&&trap19)?'이해':'복습 필요',(trap5&&trap19)?'5번(실체 있는 긴급)과 19번(수사만 강함)을 모두 포착':'5번을 위기 활용으로, 19번을 강도 2 이상으로 읽었는지 확인 — 설득이 세다고 필요한 사업은 아님'],
+   ['의무지출의 문체',trap3?'이해':'보완',trap3?'3·8번을 "없음"으로 읽음 — 설득할 필요가 없는 돈은 담담함':'3·8번에 전략을 붙였다면, 법령 서술과 설득을 구별해 볼 것']];
+  $('final').innerHTML=`<div class="card res"><table><tr><th>영역</th><th>진단</th><th>근거</th></tr>${rows.map(x=>`<tr><td><b>${x[0]}</b></td><td><span class="pill ${/높음|이해/.test(x[1])?'ok':/보통|보완|건너뜀/.test(x[1])?'warn':'bad'}">${x[1]}</span></td><td>${x[2]}</td></tr>`).join('')}</table>
+   ${strongButWeak.length?`<p class="note">여러분이 강도 3으로 읽었지만 6주차 효과성 점수가 2점 이하인 사업: ${strongButWeak.join(', ')}번. 글은 세고 성과는 약한 사업입니다.</p>`:''}
+   <p class="note">정답 여부가 아니라, 세 독자가 왜 다르게 읽었는지 설명할 수 있는가를 묻는 진단입니다. 구술 방어질문은 여기서 나옵니다.</p></div>
+   <div class="infobox"><b>오늘 확인한 것</b> — 같은 글을 사람·규칙·AI가 다르게 읽습니다. 규칙은 투명하지만 문맥을 모르고, AI는 문맥을 읽지만 근거를 물어야 하며, 사람은 기준을 적어 두지 않으면 자기도 왜 그렇게 읽었는지 모릅니다. 그리고 셋 다 <b>글이 주장하는 것</b>을 읽을 뿐, 주장이 사실인지는 점수표(6주차)와 결산(4주차)이 말해 줍니다.</div>`;
+}
+$('makeSum').onclick=()=>{
+  const agMR=DOCS.filter(d=>state.my[d[0]]===RULE[d[0]-1].tag).length;const A=state.ai;
+  const ids=A?DOCS.map(d=>d[0]).filter(id=>A[id]):[];
+  const L=['[7주차 실습 · 제출 요약] 사업설명서 텍스트 분류',
+   `① 내 라벨: ${DOCS.map(d=>`${d[0]}${state.my[d[0]].slice(0,2)}(${state.str[d[0]]})`).join(' ')}`,
+   `② 규칙 라벨과의 일치 ${agMR}/20 · 불일치: ${DOCS.filter(d=>state.my[d[0]]!==RULE[d[0]-1].tag).map(d=>d[0]).join(', ')||'없음'}`,
+   A?`③ AI 라벨과의 일치 ${ids.filter(id=>state.my[id]===A[id]).length}/${ids.length} · 규칙=AI ${ids.filter(id=>RULE[id-1].tag===A[id]).length}/${ids.length} · 셋 불일치: ${ids.filter(id=>!(state.my[id]===A[id]&&A[id]===RULE[id-1].tag)).join(', ')||'없음'}`:'③ AI 단계 건너뜀 (과제에서 수행)',
+   `   함정: 5번 ${state.my[5]} (강도 ${state.str[5]}) / 19번 ${state.my[19]} (강도 ${state.str[19]}) / 3번 ${state.my[3]} / 8번 ${state.my[8]}`,
+   '④ 발견한 것:','   '+(($('memo').value||'').trim()||'(작성 필요)').replace(/\n/g,'\n   ')];
+  state.memo=$('memo').value;save();$('sum').value=L.join('\n');$('sum').style.display='block';$('copyS').style.display='block';toast('요약을 만들었습니다');
+};
+$('copyS').onclick=()=>copy($('sum').value,'요약을 복사했습니다');
+$('reset').onclick=()=>{if(confirm('모든 진행 상황을 지우고 처음부터 시작합니다.')){localStorage.removeItem(KEY);location.reload();}};
+
+renderDocs();$('memo').value=state.memo||'';show();
+</script>
+</body>
+</html>
