@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>중간 구술시험 · AI와 공공재정관리</title>
+<style>
+  :root{--navy:#002F8E;--blue:#0F70C6;--sky:#E8F0FB;--ink:#1A2233;--mute:#61708A;--line:#D6DEEA;--bg:#F4F6FA;--card:#fff;
+        --red:#C8321E;--green:#1E7B4E;--amber:#A8660A}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
+  header{background:var(--navy);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  header .k{font-size:.72rem;letter-spacing:.06em;color:#9DB8E8}
+  header h1{margin:2px 0 0;font-size:1.05rem;font-weight:700}
+  header .nav{display:flex;gap:6px}
+  header .nav button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:6px 10px;font:inherit;font-size:.8rem}
+  header .nav button.on{background:#fff;color:var(--navy)}
+  main{max-width:860px;margin:0 auto;padding:18px 14px 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+  h2{font-size:1.1rem;margin:0 0 10px;color:var(--navy)}
+  h3{font-size:.95rem;margin:14px 0 6px;color:var(--navy)}
+  label{display:block;font-size:.8rem;color:var(--mute);margin:8px 0 4px}
+  input[type=text],input[type=password],input[type=number],select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit;font-size:.95rem;background:#fff}
+  textarea{min-height:70px;font-size:.88rem}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn{display:inline-block;border:0;border-radius:10px;padding:12px 16px;font:inherit;font-size:.95rem;font-weight:700;background:var(--navy);color:#fff;cursor:pointer}
+  .btn.sec{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn.warn{background:#fff;color:var(--amber);border:1.5px solid var(--amber)}
+  .btn.danger{background:#fff;color:var(--red);border:1.5px solid var(--red)}
+  .btn.sm{padding:7px 10px;font-size:.82rem;border-radius:8px}
+  .btn:disabled{opacity:.35;cursor:default}
+  .btn.block{display:block;width:100%;margin-top:10px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.74rem;font-weight:700;white-space:nowrap}
+  .pill.c{background:#E6F4EC;color:var(--green)}.pill.s{background:#FBF1E2;color:var(--amber)}.pill.x{background:#EEE2FF;color:#5B2DA8}.pill.w{background:var(--sky);color:var(--navy)}.pill.g{background:#EEF1F6;color:var(--mute)}.pill.p{background:#FCEBE8;color:var(--red)}
+  .prog{display:flex;gap:6px;margin:8px 0 14px}
+  .prog span{flex:1;height:8px;border-radius:4px;background:#DDE3EC}
+  .prog span.done{background:var(--green)}.prog span.pass{background:var(--red)}.prog span.cur{background:var(--blue)}
+  .qbox{font-size:1.05rem;line-height:1.75}
+  .qbox .sit{background:#FAFBFD;border-left:4px solid var(--line);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:12px;white-space:pre-wrap;font-size:.98rem}
+  .qbox .q{white-space:pre-wrap;font-weight:600}
+  .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px;font-size:.82rem;color:var(--mute)}
+  .timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);margin-left:auto;font-size:1rem}
+  .grade{display:flex;gap:8px;flex-wrap:wrap}
+  .grade button{flex:1;min-width:90px;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px;font:inherit;font-weight:700;cursor:pointer}
+  .grade button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .grade button.g0.on{background:var(--red);border-color:var(--red)}
+  .note{font-size:.8rem;color:var(--mute);margin-top:8px}
+  .okbox{background:#E6F4EC;border:1px solid #9FD3B4;color:#164A2E;border-radius:10px;padding:10px 12px;font-size:.86rem;margin-bottom:10px}
+  .warnbox{background:#FBF1E2;border:1px solid #E5C48A;color:#5C3A05;border-radius:10px;padding:10px 12px;font-size:.86rem;margin-bottom:10px}
+  .infobox{background:var(--sky);border:1px solid #BFD2F0;color:#163A75;border-radius:10px;padding:10px 12px;font-size:.86rem;margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;font-size:.84rem}
+  th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+  th{color:var(--mute);font-weight:600;font-size:.74rem;white-space:nowrap}
+  td.r,th.r{text-align:right;white-space:nowrap}
+  tr.sel td{background:#FFF8E6}
+  .score{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+  .score div{background:var(--sky);border-radius:10px;padding:10px;text-align:center}
+  .score small{display:block;font-size:.68rem;color:var(--mute)}.score b{font-size:1.2rem;color:var(--navy)}
+  details{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0;background:#fff}
+  summary{font-size:.88rem;font-weight:700;color:var(--navy);cursor:pointer}
+  .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#1A2233;color:#fff;padding:9px 14px;border-radius:8px;font-size:.84rem;opacity:0;pointer-events:none;transition:.2s;z-index:9}
+  .toast.show{opacity:1}
+  section{display:none}section.on{display:block}
+  .big{font-size:2.2rem;font-weight:800;color:var(--navy);text-align:center;margin:6px 0}
+  @media(max-width:600px){.row{grid-template-columns:1fr}.score{grid-template-columns:repeat(2,1fr)}}
+  @media print{header,.btns,.btn{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="k">AI와 공공재정관리 · 8주차</div><h1>중간 구술시험</h1></div>
+  <div class="nav">
+    <button id="navExam" class="on">시험</button>
+    <button id="navRec">기록</button>
+    <button id="navSet">설정</button>
+    <button id="navProf" title="교수자 모드">🔒</button>
+  </div>
+</header>
+<main>
+
+<!-- ===== 시험 ===== -->
+<section id="sExam" class="on">
+  <div id="start">
+    <div class="card">
+      <h2>응시자 정보</h2>
+      <div class="row">
+        <div><label>학번</label><input type="text" id="sid" inputmode="numeric" placeholder="예) 20231234" autocomplete="off"></div>
+        <div><label>이름</label><input type="text" id="sname" placeholder="이름" autocomplete="off"></div>
+      </div>
+      <div class="infobox" style="margin-top:12px" id="rule"></div>
+      <button class="btn block" id="begin">시험 시작</button>
+      <p class="note">같은 학번으로 다시 시작하면 기존에 제시된 문항을 같은 순서로 다시 제시할지, 새로 추첨할지 선택할 수 있습니다.</p>
+    </div>
+  </div>
+
+  <div id="run" style="display:none">
+    <div class="card">
+      <div class="meta"><span id="who"></span><span class="timer" id="tTotal">00:00</span></div>
+      <div class="prog" id="prog"></div>
+      <div class="meta"><span class="pill" id="pType"></span><span class="pill w" id="pWeek"></span><span id="pNo"></span><span class="timer" id="tQ">00:00</span></div>
+      <div class="qbox"><div class="sit" id="qSit" style="display:none"></div><div class="q" id="qText"></div></div>
+      <div id="gradeNow" style="display:none">
+        <h3>채점 (교수자)</h3>
+        <div class="grade" id="gradeBtns"></div>
+        <label>메모 (방어질문·근거 등)</label><textarea id="gradeMemo"></textarea>
+      </div>
+      <div class="btns">
+        <button class="btn warn" id="pass">패스 (1회)</button>
+        <button class="btn" id="done" style="flex:1">답변 완료 → 다음</button>
+      </div>
+      <p class="note">패스하면 같은 유형의 다른 문항이 대신 나옵니다. 답변 완료 5문항이면 종료됩니다 (최대 6문항 제시).</p>
+    </div>
+  </div>
+
+  <div id="end" style="display:none">
+    <div class="card">
+      <h2>시험 종료</h2>
+      <div class="okbox" id="endMsg"></div>
+      <div id="endTbl"></div>
+      <div class="btns"><button class="btn" id="newStudent">다음 응시자</button><button class="btn sec" id="toRec">기록 보기</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 기록 ===== -->
+<section id="sRec">
+  <div class="card" id="recLock"><h2>기록</h2><p class="note">교수자 모드(🔒)에서 PIN을 입력하면 기록을 열람·채점·내보내기 할 수 있습니다.</p></div>
+  <div id="recBody" style="display:none">
+    <div class="card">
+      <div class="score" id="recStat"></div>
+      <div class="btns">
+        <button class="btn sm" id="expCsvItem">상세 CSV</button>
+        <button class="btn sm" id="expCsvSum">요약 CSV</button>
+        <button class="btn sm sec" id="expJson">JSON 백업</button>
+        <label class="btn sm sec" style="margin:0">JSON 불러오기<input type="file" id="impJson" accept=".json" style="display:none"></label>
+        <button class="btn sm sec" id="syncAll">시트로 전송</button>
+        <button class="btn sm danger" id="clearAll">전체 삭제</button>
+      </div>
+    </div>
+    <div class="card" id="recList"></div>
+    <div class="card" id="recDetail" style="display:none"></div>
+    <div class="card"><h3 style="margin-top:0">문항별 출제 횟수</h3><div id="usage"></div></div>
+  </div>
+</section>
+
+<!-- ===== 설정 ===== -->
+<section id="sSet">
+  <div class="card">
+    <h2>설정</h2>
+    <label>회차 표시 (문항 추첨의 기준이 됩니다. 예: 2026-2-중간)</label><input type="text" id="setRound">
+    <h3>유형별 문항 수 (합계 5)</h3>
+    <div class="row">
+      <div><label>개념 확인 (풀 16)</label><input type="number" id="qC" min="0" max="5"></div>
+      <div><label>상황 판단 (풀 17)</label><input type="number" id="qS" min="0" max="5"></div>
+    </div>
+    <div><label>복합 (풀 5)</label><input type="number" id="qX" min="0" max="5"></div>
+    <label><input type="checkbox" id="setEven"> 출제 횟수가 적은 문항을 우선 추첨 (응시자 간 균형)</label>
+    <label><input type="checkbox" id="setWeek"> 같은 응시자에게 같은 주차 문항이 겹치지 않게 (가능한 범위에서)</label>
+    <h3>교수자</h3>
+    <label>PIN (기본 0000)</label><input type="password" id="setPin" inputmode="numeric">
+    <h3>Google 시트 동기화 (선택)</h3>
+    <label>Apps Script 웹앱 URL — README의 스크립트를 배포한 뒤 붙여넣기</label><input type="text" id="setSheet" placeholder="https://script.google.com/macros/s/.../exec">
+    <label><input type="checkbox" id="setAuto"> 시험 종료 시 자동 전송</label>
+    <button class="btn block" id="saveSet">설정 저장</button>
+    <p class="note">모든 기록은 이 기기 브라우저에 저장됩니다. 시험 종료 후 반드시 JSON 백업 또는 시트 전송을 하십시오. 시크릿 모드에서는 저장되지 않습니다.</p>
+  </div>
+</section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const QUESTIONS=[{"id": 1, "type": "개념", "week": "1주차", "title": "정부재정은 민간재정과 무엇이 다른가", "sit": null, "q": "정부재정을 민간재정과 구별짓는 세 가지 특성을 들고, 각 특성이 재정 운영에 어떤 제약을 만드는지 설명하시오."}, {"id": 2, "type": "개념", "week": "1·2주차", "title": "조세는 법률, 예산은 법률이 아니다", "sit": null, "q": "우리나라에서 조세는 법률로 정하면서 예산은 법률로 성립하지 않는다. 예산과 법률의 차이를 다섯 가지 기준으로 설명하고, 이 구조가 행정부와 국회의 관계에 미치는 영향을 말하시오."}, {"id": 3, "type": "개념", "week": "1주차", "title": "Key의 질문과 Schick의 세 가지 목표", "sit": null, "q": "V. O. Key가 1940년에 던진 질문이 무엇이었고, 당시 재정학이 왜 답하지 못했는지 말하시오. 이어서 Schick이 제시한 세 가지 목표를 들고, Key의 질문이 그중 어디에 해당하는지 설명하시오."}, {"id": 4, "type": "개념", "week": "1주차", "title": "2026년, 재정당국이 둘로 나뉘었다", "sit": null, "q": "2026년 1월 2일 시행된 재정조직 개편의 내용을 국가재정법 조문과 함께 설명하고, 두 기관의 소관 사무를 구분하시오."}, {"id": 5, "type": "개념", "week": "2주차", "title": "시장실패와 정부실패", "sit": null, "q": "시장실패의 유형을 들고, \"시장실패가 있으면 정부가 개입해야 한다\"는 주장이 왜 성립하지 않는지 설명하시오."}, {"id": 6, "type": "개념", "week": "2주차", "title": "재정의 3대 기능", "sit": null, "q": "Musgrave가 제시한 재정의 세 가지 기능을 들고, 각각이 지향하는 가치와 주요 정책수단을 설명하시오. 세 기능 사이에 긴장이 발생하는 지점도 말하시오."}, {"id": 7, "type": "개념", "week": "2주차", "title": "통합재정 — 더하는 것이 아니라 빼는 것", "sit": null, "q": "총계 기준 1,621.8조원이 총지출 728.0조원이 되기까지 무엇을 왜 제외하는지 설명하고, 통합재정수지와 관리재정수지의 차이를 말하시오."}, {"id": 8, "type": "개념", "week": "2주차", "title": "자동안정화장치와 재정팽창지수", "sit": null, "q": "\"2026년 관리재정수지 적자가 2025년 추경보다 줄었으므로 재정이 긴축적이다\"라는 진술이 왜 성립하지 않는지, 자동안정화장치와 재정팽창지수를 들어 설명하시오."}, {"id": 9, "type": "개념", "week": "2주차", "title": "예산의 전통적 원칙과 그 예외", "sit": null, "q": "예산의 전통적 원칙을 들고, 각 원칙의 예외에 해당하는 제도를 짝지어 설명하시오. 특히 특별회계와 기금은 어느 원칙의 예외인지 말하시오."}, {"id": 10, "type": "개념", "week": "3주차", "title": "예산편성 공식 절차 8단계", "sit": null, "q": "예산편성의 공식 절차를 시기·주체·근거 조문과 함께 순서대로 설명하시오."}, {"id": 11, "type": "개념", "week": "3주차", "title": "편성 단계의 통제장치", "sit": null, "q": "예산편성 과정에서 부처의 요구를 걸러내는 통제장치를 네 가지 이상 들고, 각각의 요건과 근거 조문을 설명하시오."}, {"id": 12, "type": "개념", "week": "3주차", "title": "예산의 구성요소와 종류", "sit": null, "q": "예산은 무엇으로 이루어지는가. 예산총칙에 담기는 사항을 들고, 성립 시기와 절차에 따른 예산의 종류를 구분하시오."}, {"id": 13, "type": "개념", "week": "4주차", "title": "배정과 재배정", "sit": null, "q": "국회에서 예산이 확정되면 바로 집행할 수 있는가. 예산 확정에서 실제 지급까지의 권한 사슬을 설명하고, 배정과 재배정의 차이를 주체·상대·근거 조문으로 구분하시오."}, {"id": 14, "type": "개념", "week": "4주차", "title": "결산 절차와 세계잉여금", "sit": null, "q": "국가결산보고서의 작성·제출 절차를 시기와 주체, 근거 조문과 함께 설명하고, 세계잉여금의 처리 순서를 말하시오."}, {"id": 15, "type": "개념", "week": "5주차", "title": "예산제도의 계보와 영기준예산", "sit": null, "q": "예산제도가 통제에서 성과로 변해 온 과정을 설명하고, 품목별·성과주의·계획예산의 중심 질문과 결정적 약점을 비교하시오. 이어서 영기준예산의 4단계를 말하시오."}, {"id": 16, "type": "상황", "week": "1·3·4주차", "title": "2024년판 교재로 작성한 문서", "sit": "신규 임용된 ○○부 주무관이 2024년판 행정학 교재를 참고해 업무 매뉴얼 초안을 작성했다. 다음 네 문장이 들어 있다.\n\n① 예산요구서는 5월 31일까지 기획재정부장관에게 제출한다.\n② 예산 배정은 기획재정부장관이 하고, 배정 사실을 감사원에 통지한다.\n③ 전용 승인은 기획재정부장관에게 받고, 명세서를 기획재정부장관에게 송부한다.\n④ 중앙관서결산보고서는 2월 말까지 기획재정부장관에게 제출한다.", "q": "네 문장을 2026년 현행 체계로 각각 고치고, 그중 <b>단순 명칭 치환만으로는 고칠 수 없는 문장</b>을 지목해 이유를 설명하시오."}, {"id": 17, "type": "상황", "week": "2주차", "title": "AI가 만든 코드의 결과가 흑자로 나왔다", "sit": "예산담당 주무관이 AI에 회계·기금별 수입·지출 자료를 주고 재정수지 산출 코드를 요청했다. 코드는 오류 없이 실행되었고 결과는 다음과 같다.\n\n총수입 674.2조원 / 총지출 728.0조원 / 통합재정수지 △53.8조원 / <b>관리재정수지 +1.4조원</b>", "q": "이 결과를 보도자료에 쓰기 전에 주무관이 밟아야 할 검증 절차를 설명하고, 어떤 오류가 발생했는지 진단하시오."}, {"id": 18, "type": "상황", "week": "2주차", "title": "\"긴축 예산\"이라는 보도자료", "sit": "국회예산정책처 분석관인 당신에게 어느 언론사가 묻는다. \"정부가 2026년 예산을 긴축적이라고 발표했는데 사실입니까?\"", "q": "어떻게 답할 것인지, 근거와 함께 설명하시오. 답변에 반드시 포함해야 할 전제가 무엇인지도 말하시오."}, {"id": 19, "type": "상황", "week": "3주차", "title": "총사업비 600억원짜리 신규사업", "sit": "○○부가 총사업비 600억원(국비 400억원) 규모의 청년창업센터 신축을 구상하고 있다. 2027년 착공, 공사 기간 3년을 목표로 한다. 현재는 2026년 1월이다.", "q": "이 사업을 2027년도 예산에 반영하려면 예산담당관이 언제 무엇을 해야 하는지 순서대로 설명하시오."}, {"id": 20, "type": "상황", "week": "3주차", "title": "480억원으로 낮춘 총사업비", "sit": "사업 담당 과장이 \"예타를 받으면 1년이 걸리니 총사업비를 480억원으로 잡아 먼저 착수하고, 나중에 증액하자\"고 지시했다.", "q": "예산담당관으로서 어떻게 대응해야 하는지, 이 방식이 실제로 어떤 절차에 걸리게 되는지 설명하시오."}, {"id": 21, "type": "상황", "week": "3주차", "title": "지출한도 1.2조원, 요구 소요 1.5조원", "sit": "3월 31일 편성지침이 통보되었다. ○○부의 지출한도는 1.2조원인데, 각 실·국에서 올라온 소요를 합하면 1.5조원이다.", "q": "예산담당관은 어떻게 해야 하는가. 한도를 초과해 요구서를 제출하면 어떤 일이 벌어지는지도 설명하시오."}, {"id": 22, "type": "상황", "week": "3주차", "title": "대상지가 아직 정해지지 않은 사업", "sit": "○○부가 내년에 노후 시설 정비사업 500억원을 추진하려 한다. 그런데 어느 시설을 정비할지는 연말 실태조사 결과가 나와야 정해진다. 5월 31일까지 예산요구서를 내야 한다.", "q": "예산담당관은 어떤 제도를 활용해야 하는가. 그 제도의 요건과 제약을 설명하시오."}, {"id": 23, "type": "상황", "week": "3주차", "title": "대법원 요구액을 깎아야 하는 상황", "sit": "당신은 기획예산처 사무관이다. 대법원이 제출한 예산요구액이 총량 관리상 300억원을 감액해야 할 상황이다.", "q": "어떤 절차를 밟아야 하는지 설명하고, 일반 중앙관서와 무엇이 다른지 말하시오."}, {"id": 24, "type": "상황", "week": "3·4주차", "title": "대규모 재해가 발생했다", "sit": "6월에 대규모 산불이 발생해 피해 복구에 2조원이 필요해졌다. 본예산의 재해대책비로는 부족하다.", "q": "정부가 선택할 수 있는 수단을 들고, 각각의 요건과 절차를 설명하시오."}, {"id": 25, "type": "상황", "week": "4주차", "title": "1월 2일에 돈을 쓸 수 있는가", "sit": "12월 10일 국회에서 2027년도 예산이 확정되었다. ○○부 회계과장은 1월 2일부터 집행이 가능한지 묻는 실무자의 질문을 받았다. 소관 사업 중에는 재외공관 운영비와 선박 수리비도 포함되어 있다.", "q": "답변과 그 근거를 설명하고, 1월 2일 집행을 위해 미리 해 두어야 할 일이 무엇인지 말하시오."}, {"id": 26, "type": "상황", "week": "4주차", "title": "환율 급등으로 운영비 12억원이 부족하다", "sit": "환율이 급등해 재외공관 운영비가 12억원 부족해졌다. 같은 부처의 국제협력 사업비에는 여유가 있다.", "q": "회계과장은 무엇을 가장 먼저 확인해야 하는가. 가능한 수단을 들고 각각의 요건과 통지 의무를 설명하시오."}, {"id": 27, "type": "상황", "week": "4주차", "title": "12월 20일, 준공이 늦어졌다", "sit": "12월 20일이다. 계약은 체결했으나 공사 준공이 늦어져 40억원을 연내에 지출하지 못하게 되었다.", "q": "어떤 제도를 적용해야 하는지, 요건과 제약을 설명하시오. 만약 계약조차 체결하지 않았다면 어떻게 달라지는지도 말하시오."}, {"id": 28, "type": "상황", "week": "4주차", "title": "신설 청이 출범했다", "sit": "정부조직법 개정으로 ○○부 산하 본부가 ○○청으로 승격·신설되었다. 관련 예산 800억원을 이관해야 한다.", "q": "어떤 절차를 적용하는가. 국회 의결이 필요한지 여부와 그 이유, 통지 의무를 설명하시오."}, {"id": 29, "type": "상황", "week": "4주차", "title": "산하기관이 본부 승인만 받고 계약했다", "sit": "○○부 소속기관장이 본부 기획조정실의 구두 승인만 받고 5억원짜리 용역계약을 체결했다. 해당 소속기관에 대한 세출예산 재배정은 아직 이루어지지 않은 상태였다.", "q": "이 계약에 어떤 문제가 있는지 설명하고, 정상적인 절차가 무엇이었는지 말하시오."}, {"id": 30, "type": "상황", "week": "5주차", "title": "\"모든 사업을 원점에서 재검토하라\"", "sit": "새 정부가 출범하며 \"모든 사업을 영기준으로 전면 재검토해 재량지출을 15% 줄이라\"는 지시가 내려왔다. 당신은 ○○부 기획재정담당관이다.", "q": "이 지시를 그대로 실행할 수 있는지 판단하고, 실행 가능한 대안을 제시하시오."}, {"id": 31, "type": "복합", "week": "1·2·4주차", "title": "재정 총량 관리의 책임은 누구에게 있는가", "sit": null, "q": "2026년 개편으로 예산·기금은 기획예산처, 결산·세제·국고는 재정경제부가 관장하게 되었다. 그렇다면 <b>재정 총량과 재정건전성을 관리할 책임은 누구에게 있는가.</b> 국가재정법 조문만으로 답할 수 있는지 판단하고, 답할 수 없다면 그 공백을 무엇이 메우고 있는지 설명하시오."}, {"id": 32, "type": "복합", "week": "1·2·3주차", "title": "같은 재정을 두고 왜 정반대의 서사가 가능한가", "sit": null, "q": "2026년 재정을 두고 \"적자 54조원\"과 \"적자 109조원\", \"확장 예산\"과 \"긴축 예산\"이라는 서로 다른 서술이 모두 사실일 수 있다. 어떻게 이것이 가능한지 설명하고, <b>분석관이나 담당 공무원이 수치를 제시할 때 져야 할 책임</b>이 무엇인지 논하시오."}, {"id": 33, "type": "복합", "week": "1·3·4주차", "title": "국회가 늘린 예산을 행정부가 멈출 수 있는가", "sit": null, "q": "11월 국회 심사에서 지역구 의원들의 요구로 정부안에 없던 사업이 신규 반영되어 확정되었다. 이듬해 재정당국이 이 사업들에 대해 <b>배정유보</b>를 결정했다. 이것이 제도적으로 허용되는지 판단하고, 입법부와 행정부의 권한 배분 측면에서 평가하시오."}, {"id": 34, "type": "복합", "week": "2·4주차", "title": "예외가 아홉 개면 그것은 원칙인가", "sit": null, "q": "예산의 전통적 원칙에는 각각 예외가 있고, 집행 단계의 신축성 확보 방안만 해도 아홉 가지에 이른다. <b>\"예외가 이렇게 많으면 원칙이라 할 수 있는가\"</b>라는 비판에 대해 답하시오. 답변에는 신축성 확보 방안을 원칙별로 매핑한 내용이 포함되어야 한다."}, {"id": 35, "type": "복합", "week": "3·4·5주차", "title": "결산은 왜 다음 예산을 바꾸지 못하는가", "sit": null, "q": "결산은 예산주기를 닫는 단계이면서 다음 예산으로 환류되어야 한다. 그러나 실제로는 그 환류가 약하다는 지적이 반복된다. <b>그 원인을 셋 이상 들고</b>, 결산 데이터를 AI로 분석하는 방식이 이 한계를 어디까지 보완할 수 있는지 논하시오."}, {"id": 36, "type": "개념", "week": "6주차", "title": "성과관리 예산과 프로그램예산", "sit": null, "q": "1950년대의 성과주의 예산과 1990년대 이후의 성과관리 예산을 초점·도구·책임으로 대비하고, 우리나라 프로그램예산 구조와 성과관리 체계가 어떻게 대응하는지 설명하시오. 성과계획서와 성과보고서는 각각 언제, 누구에게 가는지 말하시오."}, {"id": 37, "type": "상황", "week": "6주차", "title": "중요도를 바꿨더니 의무지출이 떨어졌다", "sit": "△△부 예산담당관이 20개 사업(요구액 1,480억원)을 지출한도 1,000억원 안에 담기 위해 다섯 기준의 중요도를 정책 부합성 50 / 시급성 10 / 효과성 20 / 형평성 10 / 집행 가능성 10으로 설정해 가중합 순위를 산출했다. 그 결과 <b>법령상 지급 의무가 있는 재난 피해 생계지원금(110억원)과 긴급 복지 지원금(70억원)이 컷라인 아래로</b> 내려갔고, 3년차 계속비 공사(180억원)도 탈락했다.", "q": "담당관은 이 순위표를 그대로 쓸 수 있는가. 무엇이 잘못되었고 어떻게 바로잡아야 하는지 설명하시오."}, {"id": 38, "type": "상황", "week": "6주차", "title": "성과보고서를 한 곳에만 보냈다", "sit": "○○부 재정성과운영관이 5월 31일 예산요구서와 함께 <b>전년도 성과보고서와 다음 연도 성과계획서를 기획예산처장관에게 제출</b>하고 업무를 마쳤다고 보고했다. 한편 성과보고서에서 \"공공 와이파이 확충\" 사업이 <b>재정사업 자율평가 \"미흡\"</b> 등급으로 나타났는데, 같은 부서는 이 사업을 전년 수준으로 다시 요구했다.", "q": "① 성과보고서의 제출 경로에 빠진 것이 있는지, ② \"미흡\" 사업의 요구에 대해 어떤 조치가 뒤따르는지 설명하시오."}];
+</script>
+<script>
+/* ---------- 설정·저장 ---------- */
+const KEY_S='exam_settings_v1', KEY_R='exam_records_v1';
+const DEF={round:'2026-2-중간',quota:{개념:2,상황:2,복합:1},even:true,week:true,pin:'0000',sheet:'',auto:false};
+let S=Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY_S)||'{}'));
+let R=JSON.parse(localStorage.getItem(KEY_R)||'[]');
+const saveS=()=>localStorage.setItem(KEY_S,JSON.stringify(S));
+const saveR=()=>localStorage.setItem(KEY_R,JSON.stringify(R));
+const $=id=>document.getElementById(id);
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)};
+let PROF=false;
+const GRADES=[[3,'고급'],[2,'중급'],[1,'초급'],[0,'미달']];
+const TCLS={개념:'c',상황:'s',복합:'x'};
+const byId=id=>QUESTIONS.find(q=>q.id===id);
+
+/* ---------- 결정적 난수 ---------- */
+function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19;}
+  return function(){h=Math.imul(h^(h>>>16),2246822507);h=Math.imul(h^(h>>>13),3266489909);h^=h>>>16;return (h>>>0)/4294967296;}}
+function usageMap(){const u={};QUESTIONS.forEach(q=>u[q.id]=0);R.forEach(r=>r.items.forEach(it=>{u[it.qid]=(u[it.qid]||0)+1}));return u;}
+/* 유형별 후보 순서를 만들어 둔다: (출제횟수 오름차순) → 시드 난수 */
+function buildOrder(sid){
+  const rnd=rng(sid+'|'+S.round);const u=usageMap();const ord={};
+  for(const t of ['개념','상황','복합']){
+    const pool=QUESTIONS.filter(q=>q.type===t).map(q=>({q,r:rnd()}));
+    pool.sort((a,b)=>(S.even?(u[a.q.id]-u[b.q.id]):0)||(a.r-b.r));
+    ord[t]=pool.map(p=>p.q.id);
+  }
+  return ord;
+}
+/* 계획: 유형 쿼터만큼 뽑되 주차 중복을 피함. 순서는 개념→상황→복합 섞어서 */
+function plan(sid,fixed){
+  const ord=buildOrder(sid);const rnd=rng('seq|'+sid+'|'+S.round);
+  const picked=[];const weeks=new Set();const ptr={개념:0,상황:0,복합:0};
+  function next(t){
+    if(fixed&&fixed.length){const id=fixed.shift();const q=byId(id);if(q){q.week.split('·').forEach(w=>weeks.add(w));return id;}}
+    const list=ord[t];let i=ptr[t];
+    if(S.week){let j=i;while(j<list.length){const q=byId(list[j]);const ws=q.week.split('·');if(!ws.some(w=>weeks.has(w))){[list[i],list[j]]=[list[j],list[i]];break;}j++;}}
+    const id=list[i];ptr[t]=i+1;if(!id)return null;byId(id).week.split('·').forEach(w=>weeks.add(w));return id;
+  }
+  const seq=[];for(const t of ['개념','상황','복합'])for(let k=0;k<(S.quota[t]||0);k++)seq.push(t);
+  for(let i=seq.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[seq[i],seq[j]]=[seq[j],seq[i]];}
+  return {seq,next,ord,ptr};
+}
+
+/* ---------- 시험 진행 ---------- */
+let cur=null, tick=null;
+function fmt(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function ruleText(){const q=S.quota;return `<b>출제 방식</b> — 개념 ${q.개념} · 상황 ${q.상황} · 복합 ${q.복합} = 5문항을 추첨합니다. 문항당 준비 30초 후 구술, 꼬리질문이 있을 수 있습니다. <b>패스는 1회</b>이며, 패스한 문항 대신 같은 유형의 다른 문항이 나옵니다. 답변을 5문항 마치면 종료됩니다.`}
+$('rule').innerHTML=ruleText();
+$('begin').onclick=()=>{
+  const sid=$('sid').value.trim(), name=$('sname').value.trim();
+  if(!sid||!name){toast('학번과 이름을 입력하십시오');return}
+  let fixed=null;const prev=R.filter(r=>r.sid===sid&&r.round===S.round);
+  if(prev.length){const last=prev[prev.length-1];
+    if(confirm('이 학번의 기록이 이미 있습니다.\n[확인] 기존에 제시된 문항을 같은 순서로 다시 제시\n[취소] 새로 추첨'))fixed=last.items.map(it=>it.qid);}
+  const P=plan(sid,fixed);
+  cur={sid,name,round:S.round,startedAt:new Date().toISOString(),endedAt:null,items:[],passUsed:false,P,answered:0,memo:''};
+  showNext();$('start').style.display='none';$('run').style.display='block';$('end').style.display='none';
+  clearInterval(tick);tick=setInterval(()=>{const now=Date.now();$('tTotal').textContent=fmt((now-new Date(cur.startedAt))/1000);const it=cur.items[cur.items.length-1];if(it&&!it.doneAt)$('tQ').textContent=fmt((now-new Date(it.shownAt))/1000)},500);
+};
+function showNext(){
+  const t=cur.P.seq[cur.answered];const id=cur.P.next(t);
+  if(!id){toast('해당 유형의 남은 문항이 없습니다');return finish();}
+  const q=byId(id);
+  cur.items.push({qid:id,type:q.type,week:q.week,order:cur.items.length+1,status:null,shownAt:new Date().toISOString(),doneAt:null,durationSec:null,grade:null,memo:''});
+  render();
+}
+function render(){
+  const it=cur.items[cur.items.length-1];const q=byId(it.qid);
+  $('who').textContent=`${cur.sid} ${cur.name} · 답변 ${cur.answered}/5${cur.passUsed?' · 패스 사용':''}`;
+  $('prog').innerHTML=cur.items.map(x=>`<span class="${x.status==='answered'?'done':x.status==='passed'?'pass':'cur'}"></span>`).join('')+'<span></span>'.repeat(Math.max(0,5-cur.answered-1));
+  $('pType').className='pill '+TCLS[q.type];$('pType').textContent=q.type;$('pWeek').textContent=q.week;$('pNo').textContent=`문항 ${q.id} · ${it.order}번째 제시`;
+  if(q.sit){$('qSit').style.display='block';$('qSit').innerHTML=q.sit}else $('qSit').style.display='none';
+  $('qText').innerHTML=q.q;
+  $('pass').disabled=cur.passUsed;$('pass').textContent=cur.passUsed?'패스 사용함':'패스 (1회)';
+  $('gradeNow').style.display=PROF?'block':'none';renderGradeBtns(it);$('gradeMemo').value=it.memo||'';
+  window.scrollTo({top:0});
+}
+function renderGradeBtns(it){$('gradeBtns').innerHTML=GRADES.map(([v,l])=>`<button class="g${v} ${it.grade===v?'on':''}" data-v="${v}">${l} (${v})</button>`).join('');
+  $('gradeBtns').querySelectorAll('button').forEach(b=>b.onclick=()=>{it.grade=+b.dataset.v;renderGradeBtns(it);});}
+$('gradeMemo').oninput=()=>{const it=cur.items[cur.items.length-1];it.memo=$('gradeMemo').value;};
+function closeItem(status){const it=cur.items[cur.items.length-1];it.status=status;it.doneAt=new Date().toISOString();it.durationSec=Math.round((new Date(it.doneAt)-new Date(it.shownAt))/1000);}
+$('pass').onclick=()=>{if(cur.passUsed)return;if(!confirm('이 문항을 패스합니다. 패스는 1회만 가능합니다.'))return;cur.passUsed=true;closeItem('passed');showNext();};
+$('done').onclick=()=>{closeItem('answered');cur.answered++;if(cur.answered>=5)finish();else showNext();};
+function finish(){
+  clearInterval(tick);cur.endedAt=new Date().toISOString();
+  const rec={sid:cur.sid,name:cur.name,round:cur.round,startedAt:cur.startedAt,endedAt:cur.endedAt,items:cur.items,passUsed:cur.passUsed,memo:'',synced:false};
+  R.push(rec);saveR();
+  $('run').style.display='none';$('end').style.display='block';
+  const ans=rec.items.filter(i=>i.status==='answered'),ps=rec.items.filter(i=>i.status==='passed');
+  $('endMsg').innerHTML=`<b>${rec.sid} ${rec.name}</b> — 답변 ${ans.length}문항${ps.length?`, 패스 ${ps.map(i=>i.qid).join(', ')}번`:''}. 소요 ${fmt((new Date(rec.endedAt)-new Date(rec.startedAt))/1000)}. 기록이 저장되었습니다.`;
+  $('endTbl').innerHTML=recTable(rec,false);
+  if(S.auto&&S.sheet)syncRec(rec);
+  cur=null;
+}
+$('newStudent').onclick=()=>{$('sid').value='';$('sname').value='';$('start').style.display='block';$('end').style.display='none';$('sid').focus();};
+$('toRec').onclick=()=>nav('Rec');
+
+/* ---------- 기록 ---------- */
+function gradeLabel(g){const f=GRADES.find(x=>x[0]===g);return f?f[1]:'—'}
+function total(rec){const a=rec.items.filter(i=>i.status==='answered');const g=a.filter(i=>i.grade!=null);return {sum:g.reduce((x,i)=>x+i.grade,0),n:g.length,of:a.length}}
+function recTable(rec,edit){
+  return `<table><tr><th>순서</th><th>문항</th><th>유형</th><th>주차</th><th>상태</th><th class="r">소요</th><th>수준</th>${edit?'<th>메모</th>':''}</tr>`+
+   rec.items.map(it=>`<tr><td>${it.order}</td><td>${it.qid}. ${byId(it.qid).title}</td><td><span class="pill ${TCLS[it.type]}">${it.type}</span></td><td>${it.week}</td><td>${it.status==='passed'?'<span class="pill p">패스</span>':'답변'}</td><td class="r">${it.durationSec!=null?fmt(it.durationSec):'—'}</td>
+   <td>${it.status==='answered'?(edit?`<select data-q="${it.order}" class="gsel"><option value="">—</option>${GRADES.map(([v,l])=>`<option value="${v}" ${it.grade===v?'selected':''}>${l} (${v})</option>`).join('')}</select>`:gradeLabel(it.grade)):'—'}</td>
+   ${edit?`<td><input type="text" class="gmemo" data-q="${it.order}" value="${(it.memo||'').replace(/"/g,'&quot;')}" placeholder="메모"></td>`:''}</tr>`).join('')+'</table>';
+}
+function renderRec(){
+  $('recLock').style.display=PROF?'none':'block';$('recBody').style.display=PROF?'block':'none';if(!PROF)return;
+  const n=R.length,graded=R.filter(r=>{const t=total(r);return t.n===t.of&&t.of>0}).length;
+  const avg=R.length?(R.reduce((x,r)=>x+total(r).sum,0)/R.length).toFixed(1):'—';
+  $('recStat').innerHTML=`<div><small>응시</small><b>${n}</b></div><div><small>채점 완료</small><b>${graded}</b></div><div><small>평균 점수 (15점)</small><b>${avg}</b></div><div><small>미전송</small><b>${R.filter(r=>!r.synced).length}</b></div>`;
+  $('recList').innerHTML=R.length?`<table><tr><th>#</th><th>학번</th><th>이름</th><th>회차</th><th>문항</th><th>패스</th><th class="r">점수</th><th>채점</th><th></th></tr>`+
+    R.map((r,i)=>{const t=total(r);return `<tr><td>${i+1}</td><td>${r.sid}</td><td>${r.name}</td><td>${r.round}</td><td>${r.items.filter(x=>x.status==='answered').map(x=>x.qid).join(', ')}</td><td>${r.items.filter(x=>x.status==='passed').map(x=>x.qid).join(', ')||'—'}</td><td class="r">${t.sum}/15</td><td>${t.n===t.of?'<span class="pill c">완료</span>':`<span class="pill s">${t.n}/${t.of}</span>`}</td><td><button class="btn sm sec" data-i="${i}">열기</button></td></tr>`}).join('')+'</table>':'<p class="note">기록이 없습니다.</p>';
+  $('recList').querySelectorAll('button').forEach(b=>b.onclick=()=>openRec(+b.dataset.i));
+  const u=usageMap();$('usage').innerHTML='<table><tr><th>문항</th><th>유형</th><th class="r">출제</th></tr>'+QUESTIONS.map(q=>`<tr><td>${q.id}. ${q.title}</td><td><span class="pill ${TCLS[q.type]}">${q.type}</span></td><td class="r">${u[q.id]}</td></tr>`).join('')+'</table>';
+}
+function openRec(i){
+  const r=R[i];const d=$('recDetail');d.style.display='block';
+  d.innerHTML=`<h2>${r.sid} ${r.name} <span class="pill g">${r.round}</span></h2><p class="note">${r.startedAt.replace('T',' ').slice(0,19)} ~ ${(r.endedAt||'').replace('T',' ').slice(11,19)} · 패스 ${r.passUsed?'사용':'미사용'}</p>
+   ${recTable(r,true)}<label>총평</label><textarea id="recMemo">${r.memo||''}</textarea>
+   <div class="btns"><button class="btn" id="recSave">채점 저장</button><button class="btn sec" id="recSync">이 기록 시트로 전송</button><button class="btn danger" id="recDel">삭제</button><button class="btn sec" id="recClose">닫기</button></div>`;
+  $('recSave').onclick=()=>{d.querySelectorAll('.gsel').forEach(s=>{const it=r.items[+s.dataset.q-1];it.grade=s.value===''?null:+s.value});d.querySelectorAll('.gmemo').forEach(s=>{r.items[+s.dataset.q-1].memo=s.value});r.memo=$('recMemo').value;r.synced=false;saveR();renderRec();openRec(i);toast('저장했습니다');};
+  $('recSync').onclick=()=>syncRec(r,true);
+  $('recDel').onclick=()=>{if(confirm('이 기록을 삭제합니다.')){R.splice(i,1);saveR();d.style.display='none';renderRec();}};
+  $('recClose').onclick=()=>{d.style.display='none'};
+  d.scrollIntoView({behavior:'smooth'});
+}
+function csv(rows){const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';return '﻿'+rows.map(r=>r.map(esc).join(',')).join('\r\n');}
+function dl(name,text,type='text/csv'){const b=new Blob([text],{type:type+';charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+$('expCsvItem').onclick=()=>{const rows=[['학번','이름','회차','제시순서','문항번호','문항','유형','주차','상태','소요초','수준','점수','메모','제시시각','종료시각']];
+  R.forEach(r=>r.items.forEach(it=>rows.push([r.sid,r.name,r.round,it.order,it.qid,byId(it.qid).title,it.type,it.week,it.status==='passed'?'패스':'답변',it.durationSec,it.status==='answered'?gradeLabel(it.grade):'',it.status==='answered'&&it.grade!=null?it.grade:'',it.memo,it.shownAt,it.doneAt])));dl(`구술시험_상세_${S.round}.csv`,csv(rows));};
+$('expCsvSum').onclick=()=>{const rows=[['학번','이름','회차','답변문항','패스문항','총점(15)','채점문항수','시작','종료','총평']];
+  R.forEach(r=>{const t=total(r);rows.push([r.sid,r.name,r.round,r.items.filter(x=>x.status==='answered').map(x=>x.qid).join(' '),r.items.filter(x=>x.status==='passed').map(x=>x.qid).join(' '),t.sum,`${t.n}/${t.of}`,r.startedAt,r.endedAt,r.memo])});dl(`구술시험_요약_${S.round}.csv`,csv(rows));};
+$('expJson').onclick=()=>dl(`구술시험_백업_${S.round}_${new Date().toISOString().slice(0,10)}.json`,JSON.stringify({settings:S,records:R},null,1),'application/json');
+$('impJson').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);const inc=o.records||o;let add=0;inc.forEach(r=>{if(!R.some(x=>x.sid===r.sid&&x.startedAt===r.startedAt)){R.push(r);add++}});saveR();renderRec();toast(`${add}건 추가`);}catch(err){toast('파일을 읽지 못했습니다')}};rd.readAsText(f);e.target.value='';};
+$('clearAll').onclick=()=>{if(confirm('모든 기록을 삭제합니다. 백업했습니까?')&&confirm('정말 삭제합니까?')){R=[];saveR();renderRec();}};
+/* Google Sheets */
+function syncRec(r,notify){if(!S.sheet){toast('설정에서 시트 URL을 먼저 입력하십시오');return}
+  const payload={sid:r.sid,name:r.name,round:r.round,startedAt:r.startedAt,endedAt:r.endedAt,passUsed:r.passUsed,total:total(r).sum,memo:r.memo,items:r.items.map(it=>({order:it.order,qid:it.qid,title:byId(it.qid).title,type:it.type,week:it.week,status:it.status,durationSec:it.durationSec,grade:it.grade,memo:it.memo}))};
+  fetch(S.sheet,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)}).then(()=>{r.synced=true;saveR();if(notify){toast('전송했습니다');renderRec();}}).catch(()=>toast('전송 실패'));
+}
+$('syncAll').onclick=()=>{const list=R.filter(r=>!r.synced);if(!list.length){toast('전송할 기록이 없습니다');return}list.forEach(r=>syncRec(r));setTimeout(()=>{renderRec();toast(`${list.length}건 전송 시도`)},800);};
+
+/* ---------- 설정 ---------- */
+function loadSet(){$('setRound').value=S.round;$('qC').value=S.quota.개념;$('qS').value=S.quota.상황;$('qX').value=S.quota.복합;$('setEven').checked=S.even;$('setWeek').checked=S.week;$('setPin').value=S.pin;$('setSheet').value=S.sheet;$('setAuto').checked=S.auto;}
+$('saveSet').onclick=()=>{const c=+$('qC').value||0,s=+$('qS').value||0,x=+$('qX').value||0;if(c+s+x!==5){toast('유형별 문항 수의 합이 5가 되어야 합니다');return}
+  S={round:$('setRound').value.trim()||DEF.round,quota:{개념:c,상황:s,복합:x},even:$('setEven').checked,week:$('setWeek').checked,pin:$('setPin').value||'0000',sheet:$('setSheet').value.trim(),auto:$('setAuto').checked};saveS();$('rule').innerHTML=ruleText();toast('저장했습니다');};
+
+/* ---------- 내비게이션·교수자 ---------- */
+function nav(x){['Exam','Rec','Set'].forEach(k=>{$('s'+k).classList.toggle('on',k===x);$('nav'+k).classList.toggle('on',k===x)});if(x==='Rec')renderRec();if(x==='Set')loadSet();}
+$('navExam').onclick=()=>nav('Exam');$('navRec').onclick=()=>nav('Rec');$('navSet').onclick=()=>{if(!PROF){toast('교수자 모드에서만 설정할 수 있습니다');return}nav('Set')};
+$('navProf').onclick=()=>{if(PROF){PROF=false;$('navProf').textContent='🔒';toast('교수자 모드 해제');if(cur)render();renderRec();return}
+  const p=prompt('교수자 PIN');if(p===S.pin){PROF=true;$('navProf').textContent='🔓';toast('교수자 모드');if(cur)render();renderRec();}else if(p!==null)toast('PIN이 틀렸습니다');};
+window.addEventListener('beforeunload',e=>{if(cur){e.preventDefault();e.returnValue=''}});
+</script>
+</body>
+</html>
