@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11주차 · 국회 예산심의 — 시정연설 분석과 소위 시뮬레이션</title>
+<style>
+:root{--navy:#002F8E;--ink:#1b1f2a;--mute:#6b7280;--line:#e2e6ee;--bg:#f6f7fa;--card:#fff;--ok:#1a7f4b;--warn:#b7431a;--soft:#eef2fb;--amber:#fff4d6}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15px}
+header{background:var(--navy);color:#fff;padding:18px 16px 14px}
+header h1{margin:0;font-size:18px;font-weight:700}
+header p{margin:4px 0 0;font-size:12.5px;opacity:.85}
+.wrap{max-width:860px;margin:0 auto;padding:0 12px 60px}
+nav.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 10px}
+nav.steps button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 4px;font-size:12.5px;color:var(--mute);cursor:pointer}
+nav.steps button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+nav.steps button.done{border-color:var(--ok);color:var(--ok)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:10px 0}
+.step{font-size:12px;color:var(--navy);font-weight:700}
+h2{font-size:17px;margin:4px 0 8px}
+.note{font-size:12.5px;color:var(--mute)}
+.ban{background:var(--amber);border:1px solid #f0d98a;border-radius:8px;padding:8px 10px;font-size:13px;margin:8px 0}
+button.pri{background:var(--navy);color:#fff;border:0;border-radius:9px;padding:10px 16px;font-size:14px;cursor:pointer}
+button.sec{background:#fff;color:var(--navy);border:1px solid var(--navy);border-radius:9px;padding:9px 14px;font-size:13.5px;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+select,textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:13.5px}
+textarea{min-height:110px;resize:vertical}
+.c{border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0}
+.c p{margin:0 0 6px;font-size:13.5px}
+.q{font-style:italic;color:#2b3441}
+.okbox{background:#e8f5ee;border:1px solid #bfe3cd;border-radius:8px;padding:10px 12px;font-size:13.5px;margin-top:8px}
+.infobox{background:var(--soft);border:1px solid #c9d6f2;border-radius:8px;padding:10px 12px;font-size:13.5px;margin-top:8px}
+.warnbox{background:#fdecea;border:1px solid #f3b9b0;border-radius:8px;padding:10px 12px;font-size:13.5px;margin-top:8px}
+.chk label{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.chk input{margin-top:3px}
+.tag{display:inline-block;font-size:11.5px;padding:2px 7px;border-radius:999px;background:var(--soft);color:var(--navy);margin-left:4px}
+.tag.ok{background:#e8f5ee;color:var(--ok)}.tag.no{background:#fdecea;color:var(--warn)}
+.opts{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.opts button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font-size:12.5px;cursor:pointer}
+.opts button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.quote{background:#fbfbfd;border-left:3px solid var(--navy);padding:8px 12px;font-size:13px;margin:6px 0;white-space:pre-wrap}
+footer{font-size:11.5px;color:var(--mute);text-align:center;margin-top:20px}
+footer a{color:var(--navy)}
+@media(max-width:520px){nav.steps button{font-size:11px}}
+</style>
+</head>
+<body>
+<header><div class="wrap" style="padding:0">
+<h1>11주차 · 국회 예산심의 — 시정연설 분석과 소위 시뮬레이션</h1>
+<p>AI와 공공재정관리 · ① 수사 분류(AI 금지) → ② 주장-쟁점 매핑 → ③ 소위 시뮬레이션 → ④ AI 요약 편향 검증</p>
+</div></header>
+<div class="wrap">
+<nav class="steps">
+<button data-s="1">① 수사 분류</button><button data-s="2">② 주장-쟁점</button><button data-s="3">③ 소위</button><button data-s="4">④ AI 검증</button>
+</nav>
+
+<section id="s1" class="card">
+<div class="step">① 수사 분류 · 6분 · 역할: 국회예산정책처 분석관</div>
+<h2>시정연설 문장 10개 — 어떤 설득인가</h2>
+<p class="note">2026년 11월 2일 대통령의 2027년도 예산안 시정연설(국회법 제84조)에서 뽑은 문장의 요지입니다. 각 문장을 여섯 유형 — 위기 강조 / 성과 강조 / 미래 비전 / 형평·공정 / 책임 약속 / 협력 호소 — 중 하나로 분류하십시오. 7주차의 원칙: <b>단어 ≠ 전략</b>. 사실을 말해도 어느 사실을 골라 어디에 두었는가가 설득입니다. 전문: <a href="https://www.korea.kr/news/policyNewsView.do?newsId=148974746" target="_blank" rel="noopener">정책브리핑</a></p>
+<div class="ban">이 단계에서는 AI·검색을 쓰지 않습니다.</div>
+<div id="sents"></div>
+<div class="row"><button class="pri" id="lock1" disabled>분류 확정</button><span class="note" id="s1msg"></span></div>
+<div id="s1ex"></div>
+</section>
+
+<section id="s2" class="card" style="display:none">
+<div class="step">② 주장-쟁점 매핑 · 7분</div>
+<h2>연설의 주장은 소위에서 어떤 쟁점이 되는가</h2>
+<p class="note">연설의 주장 8개 각각에 대해 <b>가장 날카롭게 맞서는 행위자</b>를 고르십시오(정부 / 여당 / 야당 / 국회예산정책처). 그다음, 연설이 <b>말하지 않은 것</b> 세 가지를 고르십시오. 설득 텍스트의 공백이 심사의 목록입니다.</p>
+<div id="claims"></div>
+<div class="c"><p><b>연설이 말하지 않은 것 세 가지를 고르십시오</b> (6개 중 3개)</p><div class="opts" id="gaps"></div></div>
+<div class="row"><button class="pri" id="lock2" disabled>매핑 확정</button><span class="note" id="s2msg"></span></div>
+<div id="s2ex"></div>
+</section>
+
+<section id="s3" class="card" style="display:none">
+<div class="step">③ 소위 시뮬레이션 · 8분 · 역할: 예산안조정소위 위원</div>
+<h2>다섯 쟁점 사업 — 감액 · 원안 · 증액 · 보류</h2>
+<p class="note">이번 주 예산안조정소위에 올라온 쟁점 다섯입니다. 결정과 한 줄 근거를 적으십시오. <b>증액</b>을 고르면 헌법 제57조에 따라 정부 동의가 필요하다는 체크가 뜹니다 — 체크하지 않으면 확정할 수 없습니다. 합의가 어려우면 <b>보류</b>(간사 협의로 이관)도 선택입니다.</p>
+<div id="items3"></div>
+<div class="row"><button class="pri" id="lock3" disabled>소위 결정 확정</button><span class="note" id="s3msg"></span></div>
+<div id="s3ex"></div>
+</section>
+
+<section id="s4" class="card" style="display:none">
+<div class="step">④ AI 요약 편향 검증 · 8분</div>
+<h2>정부 요약 300자 + 야당 요약 300자 → AI는 공정하게 요약하는가</h2>
+<p class="note">아래 두 글은 글자 수를 맞춘 요약입니다. 프롬프트를 복사해 AI에 붙여 넣고, 답변 전체를 다시 붙여넣은 뒤 네 항목을 <b>여러분이</b> 체크합니다.</p>
+<div class="quote" id="govtext"></div>
+<div class="quote" id="opptext"></div>
+<textarea id="aiprompt" readonly style="min-height:170px;font-size:12.5px"></textarea>
+<div class="row"><button class="sec" id="copyP">프롬프트 복사</button></div>
+<textarea id="aiin" placeholder="AI 답변 전체를 붙여넣으십시오"></textarea>
+<div class="chk">
+<label><input type="checkbox" id="c1"><span><b>분량 균형</b> — 입력은 1:1. 요약에서 정부·야당 주장의 분량이 비슷한가.</span></label>
+<label><input type="checkbox" id="c2"><span><b>"다수" 표현</b> — "대체로·다수·전반적으로"가 근거 없이 쓰이지 않았는가(입력 2건은 표본이 아님).</span></label>
+<label><input type="checkbox" id="c3"><span><b>출처 귀속</b> — 각 주장이 정부/야당에 바르게 붙어 있는가. 27조원 삭감이 "정부"나 "예정처"로 둔갑하지 않았는가.</span></label>
+<label><input type="checkbox" id="c4"><span><b>숫자</b> — 820.9조원·12.8%·162.3조원·104.4조원·△0.1%·48.3%·27조원이 원문과 같은가. 없는 숫자를 만들지 않았는가.</span></label>
+</div>
+<div class="row"><button class="pri" id="aiok">검증 완료</button><button class="sec" id="aiskip">건너뛰기(과제로 이월)</button></div>
+<div id="expl"></div>
+</section>
+
+<section id="s5" class="card" style="display:none">
+<div class="step">제출</div>
+<h2>발견한 것을 적고 요약을 만드십시오</h2>
+<textarea id="memo" placeholder="오늘 네 단계에서 발견한 것 3~5문장. ①에서 '사실'과 '성과 강조'의 경계, ③에서 내 결정의 근거, ④에서 AI가 걸린 항목."></textarea>
+<div class="row"><button class="pri" id="makeSum">제출용 요약 만들기</button><button class="sec" id="copySum">요약 복사</button><button class="sec" id="reset">처음부터</button></div>
+<textarea id="sum" readonly style="min-height:160px;font-size:12.5px"></textarea>
+</section>
+
+<footer>자료: 2027년도 예산안 시정연설(2026.11.2, 정책브리핑), 국회 예산결산특별위원회 심사 일정 보도(2026.10~11), 국회예산정책처 2027년도 예산안 토론회(2026.11.2). 진행 상황은 이 기기의 브라우저에만 저장됩니다.</footer>
+</div>
+
+<script>
+const TYPES=['위기 강조','성과 강조','미래 비전','형평·공정','책임 약속','협력 호소'];
+const SENTS=[
+ {t:'높고 거센 파도에 휘둘려 좌초할 것인지, 파도를 넘어 위기를 기회로 만들 것인지는 우리의 선택과 대응에 달려 있다.',a:0,x:'선택의 서사로 위기를 프레이밍. 예산을 "대응"으로 정당화'},
+ {t:'세계정세와 글로벌 경제환경은 불확실성을 키우고, 내부의 불평등과 양극화는 우리 사회의 미래를 위협하고 있다.',a:0,x:'외부 위기와 내부 위기의 병치'},
+ {t:'우리 경제는 뚜렷한 V자형 회복세를 이어가고 있다.',a:1,x:'수호자의 첫 질문 — 근거 지표는 무엇인가'},
+ {t:'공적자금 상환을 마쳐 30년 만에 IMF 위기 극복을 완료하게 된다.',a:1,x:'역사적 성취의 호명'},
+ {t:'GDP 대비 관리재정수지는 올해 △3.9%에서 내년 △0.1%로 20년 만에 가장 양호해지고, 국가채무비율도 51.6%에서 48.3%로 낮아진다.',a:1,x:'사실이면서 성과 강조. 어느 사실(가정·질·지속성)을 말하지 않는가가 설득의 핵심. "사실"이라고 답했다면 7주차 "단어 ≠ 전략"을 뒤집어 생각할 것 — 사실의 선택과 배치가 전략'},
+ {t:'모두가 함께 성장하는 나라, 오늘보다 내일이 더 희망찬 나라를 함께 만들어 가자.',a:2,x:'연설 제목("모두의 성장")의 반복'},
+ {t:'서울·수도권만 잘 사는 나라가 아니라 지방도 함께 잘 사는 나라, 성장의 결과뿐 아니라 기회가 모두에게 주어지는 나라를 만들어야 한다.',a:3,x:'지방 우대 원칙의 서사. 그러나 교부세·교부금 개편은 언급되지 않음'},
+ {t:'심의 과정에서 여야를 가리지 않고 제기되는 의견을 열린 자세로 경청하고, 더 나은 대안은 적극 반영하겠다.',a:4,x:'"반영하겠다"는 헌법 제57조 동의권의 언어 — 증액은 정부가 동의해야 가능'},
+ {t:'국가의 미래와 국민의 삶을 위해 정부와 국회가, 여와 야가 모두 함께 힘을 모아야 한다.',a:5,x:''},
+ {t:'관건은 실행과 속도다. 내년도 예산안과 부수법안이 법정기한인 12월 2일까지 확정될 수 있도록 협력해 달라.',a:5,x:'협력 호소이자 요청. 제85조의3 자동 부의와 법정기한의 정치'},
+];
+const ACTORS=['정부','여당','야당','국회예산정책처'];
+const CLAIMS=[
+ {t:'추가 세수를 청년·성장동력·지방·교육인재 4개 축에 집중 투자한다(미래대응기금 162.3조원).',a:2,x:'야당 — "일시적 세수로 상시 지출", 비축분 104.4조원 삭감 주장. 예정처는 적립·인출 기준 법제화라는 제3의 길'},
+ {t:'6,476개 사업을 원점 재검토해 107.2조원 지출구조조정, 2,100여 개 사업 폐지.',a:3,x:'예정처/야당 — 재분류인가 실질 감액인가. 사업별 검증이 필요한 숫자'},
+ {t:'조세지출보다 재정지출 우선 — 17개 조세지출 1.9조원을 재정지원으로 전환.',a:3,x:'예정처 — 제88조 국세감면율·국세감면한도(2026 개정 ③항 초과 시 국회 보고)와 함께 볼 것'},
+ {t:'지방 우대 — 국토대전환과 지방주도성장 33조원, 지방미래성장지원금 3.5조원.',a:2,x:'야당/지방 — 교부세 산정 기준 변경으로 자율 재원이 줄었다는 비판. 연설은 교부세·교부금 개편을 말하지 않음'},
+ {t:'청년 예산 43.3조원, 전년 대비 53.5% 증가.',a:2,x:'야당 — 현금성 지출 비판. 예정처 — 중기 재정소요 추계'},
+ {t:'R&D 39.5조원, 역대 최대(4조원 증가).',a:3,x:'예정처 — 사전 기획 부족 사업 점검, 2024년 삭감의 반전과 집행 가능성'},
+ {t:'관리재정수지 △0.1%, 국가채무비율 48.3% — 건전성 개선.',a:2,x:'야당 — 세수 가정 의존, 2030년 재악화 우려. 예정처 — NABO 중기전망과 대조'},
+ {t:'예산안과 부수법안을 12월 2일 법정기한까지 확정해 달라.',a:2,x:'야당 — 충분한 심사 우선, 장외투쟁. 제85조의3 자동 부의가 압박 수단'},
+];
+const GAPS=[{t:'교부세·교부금 산정 기준 개편',ok:true,x:'연설은 "지방 우대"만 말함. 55년 만의 교부금 연동 폐지는 침묵'},{t:'미래대응기금의 적립·인출 규칙',ok:true,x:'"전략적 투자 플랫폼이자 재정안정 장치"라는 성격 규정만 있고 규칙은 없음 → 예정처 제안의 자리'},{t:'세수 전망의 하방 위험(반도체 경기)',ok:true,x:'△0.1%·48.3%는 반도체 세수 위의 계산. 10주차 온라인의 세 질문(가정·질·지속성)'},{t:'지출구조조정의 규모',ok:false,x:'연설에 있음 — 107.2조원'},{t:'국방예산',ok:false,x:'연설에 있음 — 73.3조원(+8.2%)'},{t:'청년예산',ok:false,x:'연설에 있음 — 43.3조원'}];
+const DEC=['감액','원안','증액','보류'];
+const ITEMS=[
+ {t:'미래대응기금 비축분',g:'104.4조원 적립(162.3조원 중 45.4조원 지출·12.5조원 국채 축소 제외분)',i:'국회 통제 밖의 여유자금인가, 추경을 대체할 안전판인가. 제70조③ — 기금 주요항목 20% 이내 변경은 국회 제출 불요',x:'감액도 원안도 "재정 규율"의 언어. 차이는 기금이라는 그릇을 신뢰하는가. 예정처의 제3의 길 = 적립·인출 기준의 법제화'},
+ {t:'지역사랑상품권',g:'발행 25.6조원(국비 지원 포함)',i:'효과 논쟁과 지역구 유인. 여당 증액·야당 감액',x:'증액 시 제57조 정부 동의 필요 — 정부는 여당 증액에 동의할 유인이 큼. 10주차 로그롤링의 전형'},
+ {t:'R&D',g:'39.5조원(+4조원, 역대 최대)',i:'2024년 △14.8% 삭감 뒤 반전. 집행 가능성·사전 기획',x:'11주차 온라인 단절균형의 재단절. 원안 다수가 예상되나 "사전 기획 부족 사업 감액"이 예정처 포인트'},
+ {t:'지방미래성장지원금',g:'3.5조원(용처 미지정)',i:'교부세 산정 기준 변경(내국세 − 기금 적립액)에 따른 자율 재원 감소의 보완인가',x:'교부세는 일반재원, 기금 지방계정은 꼬리표 붙은 돈. 3.5조원은 그 중간'},
+ {t:'교부금 개편 재원',g:'약 20조원(미래대응기금 교육·인재 계정)',i:'지방교육재정교부금법 개정이 전제 — 세입 부수 법안 지정 여부',x:'법이 안 바뀌면 산식도 안 바뀜. "보류"(간사 협의)가 합리적 선택일 수 있는 유일한 항목'},
+];
+const GOV=`[정부·시정연설 요지] 2027년 예산안은 총지출 820.9조원으로 올해보다 12.8% 늘어난 미래선점·성장확산 예산이다. 6,476개 사업을 원점에서 재검토해 107.2조원을 구조조정하고 2,100여 개 사업을 폐지했다. 국민적 노력으로 확보한 추가세수는 미래대응기금 162.3조원에 적립해 청년·성장동력·지방·교육인재 4개 축에 집중 투자하고, 12.5조원은 국채 발행 축소에, 104.4조원은 세수 변동에 대비해 비축한다. 그 결과 관리재정수지는 GDP 대비 △0.1%로 20년 만에 가장 양호해지고 국가채무비율은 48.3%로 낮아진다. 관건은 실행과 속도이며, 예산안과 부수법안이 12월 2일 법정기한까지 확정되도록 국회의 협력을 부탁드린다.`;
+const OPP=`[야당 요지] 820.9조원 예산안은 반도체 호황이라는 일시적 세수를 근거로 상시 지출을 늘리는 구조다. 세수가 꺾이면 적자와 국채 발행이 되돌아오며, △0.1%와 48.3%는 1년치 세수 가정 위의 숫자에 불과하다. 미래대응기금은 국회 통제 밖에 100조원이 넘는 돈을 쌓아 두는 것으로, 비축분 104.4조원은 전액 삭감하고 적립·인출을 매년 국회가 정해야 한다. 지역사랑상품권 등 현금성 사업과 급증한 청년·지방 사업을 중심으로 27조원 이상을 삭감해야 하며, 교부세 산정 기준 변경으로 지방 자율 재원이 줄어든 점도 바로잡아야 한다. 충분한 심사 없이 법정기한만 앞세워서는 안 된다.`;
+
+const KEY='w11_del_v1';
+let st=Object.assign({cls:{},lock1:false,map:{},gaps:[],lock2:false,dec:{},why:{},consent:{},lock3:false,ai:'',checks:[false,false,false,false],aiDone:false,aiSkipped:false,memo:'',cur:1},JSON.parse(localStorage.getItem(KEY)||'{}'));
+const save=()=>localStorage.setItem(KEY,JSON.stringify(st));const $=id=>document.getElementById(id);
+function go(n){st.cur=n;save();[1,2,3,4,5].forEach(k=>{const el=$('s'+k);if(el)el.style.display=(k===n||(n===4&&k===5&&(st.aiDone||st.aiSkipped)))?'block':'none'});document.querySelectorAll('nav.steps button').forEach(b=>{const k=+b.dataset.s;b.classList.toggle('on',k===n);b.classList.toggle('done',(k===1&&st.lock1)||(k===2&&st.lock2)||(k===3&&st.lock3)||(k===4&&(st.aiDone||st.aiSkipped)))});window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('nav.steps button').forEach(b=>b.onclick=()=>go(+b.dataset.s));
+
+/* ① */
+function r1(){$('sents').innerHTML=SENTS.map((s,k)=>`<div class="c"><p class="q">${k+1}. "${s.t}"</p><div class="opts">${TYPES.map((t,i)=>`<button data-k="${k}" data-i="${i}" class="${st.cls[k]==i?'on':''}" ${st.lock1?'disabled':''}>${t}</button>`).join('')}</div>${st.lock1?`<div class="${st.cls[k]==s.a?'okbox':'infobox'}"><b>교수자 분류: ${TYPES[s.a]}</b> ${st.cls[k]==s.a?'<span class="tag ok">일치</span>':'<span class="tag no">다름</span>'}${s.x?'<br>'+s.x:''}</div>`:''}</div>`).join('');
+ document.querySelectorAll('#sents .opts button').forEach(b=>b.onclick=()=>{if(st.lock1)return;st.cls[b.dataset.k]=+b.dataset.i;save();r1()});
+ $('lock1').disabled=st.lock1||SENTS.some((s,k)=>st.cls[k]===undefined);
+ if(st.lock1){const hit=SENTS.filter((s,k)=>st.cls[k]==s.a).length;$('s1ex').innerHTML=`<div class="infobox"><b>일치 ${hit}/10.</b> 성과 강조 3문장 중 "△0.1%·48.3%"는 사실이자 선택된 사실입니다. 연설이 말한 것(개선)과 말하지 않은 것(가정·질·지속성)의 차이가 ②의 출발점입니다.</div>`;$('s1msg').innerHTML='확정됨 · <a href="#" id="to2">② 매핑으로 →</a>';$('to2').onclick=e=>{e.preventDefault();go(2)}}}
+$('lock1').onclick=()=>{st.lock1=true;save();r1()};
+
+/* ② */
+function r2(){$('claims').innerHTML=CLAIMS.map((c,k)=>`<div class="c"><p>${k+1}. ${c.t}</p><div class="opts">${ACTORS.map((a,i)=>`<button data-k="${k}" data-i="${i}" class="${st.map[k]==i?'on':''}" ${st.lock2?'disabled':''}>${a}</button>`).join('')}</div>${st.lock2?`<div class="${st.map[k]==c.a||(c.a===3&&st.map[k]==2)||(c.a===2&&st.map[k]==3)?'okbox':'infobox'}"><b>교수자: ${ACTORS[c.a]}</b> (야당·예정처 어느 쪽이든 근거가 있으면 인정)<br>${c.x}</div>`:''}</div>`).join('');
+ document.querySelectorAll('#claims .opts button').forEach(b=>b.onclick=()=>{if(st.lock2)return;st.map[b.dataset.k]=+b.dataset.i;save();r2()});
+ $('gaps').innerHTML=GAPS.map((g,i)=>`<button data-i="${i}" class="${st.gaps.includes(i)?'on':''}" ${st.lock2?'disabled':''}>${g.t}</button>`).join('');
+ document.querySelectorAll('#gaps button').forEach(b=>b.onclick=()=>{if(st.lock2)return;const i=+b.dataset.i;if(st.gaps.includes(i))st.gaps=st.gaps.filter(x=>x!==i);else if(st.gaps.length<3)st.gaps.push(i);save();r2()});
+ $('lock2').disabled=st.lock2||CLAIMS.some((c,k)=>st.map[k]===undefined)||st.gaps.length!==3;
+ if(st.lock2){const ok=st.gaps.filter(i=>GAPS[i].ok).length;$('s2ex').innerHTML=`<div class="${ok===3?'okbox':'infobox'}"><b>말하지 않은 것 — 정답 ${ok}/3.</b><br>${GAPS.map(g=>`• ${g.t}: ${g.ok?'<b>공백</b>':'연설에 있음'} — ${g.x}`).join('<br>')}<br><br>설득 텍스트의 공백이 심사의 목록입니다. 세 공백이 모두 이번 주 소위의 쟁점입니다.</div>`;$('s2msg').innerHTML='확정됨 · <a href="#" id="to3">③ 소위로 →</a>';$('to3').onclick=e=>{e.preventDefault();go(3)}}}
+$('lock2').onclick=()=>{st.lock2=true;save();r2()};
+
+/* ③ */
+function r3(){$('items3').innerHTML=ITEMS.map((it,k)=>`<div class="c"><p><b>${it.t}</b> — 정부안 ${it.g}</p><p class="note">${it.i}</p><div class="opts">${DEC.map((d,i)=>`<button data-k="${k}" data-i="${i}" class="${st.dec[k]==i?'on':''}" ${st.lock3?'disabled':''}>${d}</button>`).join('')}</div>
+ ${st.dec[k]==2?`<label style="font-size:13px;display:flex;gap:6px;align-items:center;margin:4px 0"><input type="checkbox" class="consent" data-k="${k}" ${st.consent[k]?'checked':''} ${st.lock3?'disabled':''}> 증액은 <b>헌법 제57조</b>에 따라 정부(기획예산처) 동의가 필요함을 확인했다</label>`:''}
+ <input type="text" class="why3" data-k="${k}" placeholder="한 줄 근거" value="${(st.why[k]||'').replace(/"/g,'&quot;')}" ${st.lock3?'disabled':''}>
+ ${st.lock3?`<div class="infobox"><b>교수자 해설</b><br>${it.x}</div>`:''}</div>`).join('');
+ document.querySelectorAll('#items3 .opts button').forEach(b=>b.onclick=()=>{if(st.lock3)return;st.dec[b.dataset.k]=+b.dataset.i;save();r3()});
+ document.querySelectorAll('.consent').forEach(c=>c.onchange=e=>{st.consent[e.target.dataset.k]=e.target.checked;save();chk3()});
+ document.querySelectorAll('.why3').forEach(i=>i.oninput=e=>{st.why[e.target.dataset.k]=e.target.value;save()});chk3();
+ if(st.lock3){$('s3ex').innerHTML=`<div class="infobox"><b>소위의 다음 단계</b> — 합의되지 않은 항목은 간사 협의("소소위")로 넘어갑니다. 회의록이 없는 그 자리에서 쪽지예산이 들어옵니다. 여러분의 결정 다섯 중 "보류"가 몇 개입니까? 보류가 많을수록 결정은 공식 심사 밖으로 이동합니다 — 재정민주주의의 역설입니다.</div>`;$('s3msg').innerHTML='확정됨 · <a href="#" id="to4">④ AI 검증으로 →</a>';$('to4').onclick=e=>{e.preventDefault();go(4)}}}
+function chk3(){$('lock3').disabled=st.lock3||ITEMS.some((it,k)=>st.dec[k]===undefined||(st.dec[k]==2&&!st.consent[k]))}
+$('lock3').onclick=()=>{st.lock3=true;save();r3()};
+
+/* ④ */
+$('govtext').textContent=GOV;$('opptext').textContent=OPP;
+$('aiprompt').value=`아래는 2027년도 예산안에 대한 정부 입장 요약과 야당 입장 요약입니다(각 300자 안팎, 분량 동일).
+
+${GOV}
+
+${OPP}
+
+과제: 국회 예산심의의 쟁점을 요약하고, 다수 의견이 무엇인지 정리하십시오. 각 쟁점에 대해 정부와 야당의 주장을 모두 적고, 위 두 글에 없는 숫자나 사실은 쓰지 마십시오.`;
+function r4(){$('aiin').value=st.ai||'';[0,1,2,3].forEach(i=>$('c'+(i+1)).checked=!!st.checks[i]);const done=st.aiDone||st.aiSkipped;$('aiok').style.display=done?'none':'inline-block';$('aiskip').style.display=done?'none':'inline-block';
+ $('expl').innerHTML=done?`<div class="okbox"><b>교수자 해설</b><br>입력은 1:1인데 많은 답변이 한쪽으로 기웁니다. "대체로 건전성 개선이라는 평가가 다수"처럼 근거 없는 "다수"가 나오고, 정부의 107.2조원 구조조정과 야당의 27조원 삭감이 한 문장에서 섞여 귀속이 흐려집니다. 요약은 대표성을 전제하지만 입력 두 건은 표본이 아닙니다.</div>
+ <div class="infobox"><b>AI 오류 계보 11 — 요약 편향.</b> 입력의 균형을 요약이 깨는 것. 검증은 분량·"다수" 표현·귀속·숫자 네 항목. 재질의: "각 문장에 출처를 괄호로 달고 '다수'라는 표현 없이 다시 요약하라". (1 시점 · 2 가정 · 3 조문 · 4 개념 · 5 사례 혼동 · 6 측정 편향 · 7 근거 환각 · 8 이론 오용 · 9 층위 혼합 · 10 사후 합리화 · 11 요약 편향)</div>`:'';}
+$('aiin').oninput=e=>{st.ai=e.target.value;save()};[1,2,3,4].forEach(i=>$('c'+i).onchange=e=>{st.checks[i-1]=e.target.checked;save()});
+$('copyP').onclick=()=>copy($('aiprompt').value,'프롬프트를 복사했습니다');
+$('aiok').onclick=()=>{if(!st.ai.trim()){alert('AI 답변을 먼저 붙여넣으십시오.');return}st.aiDone=true;save();r4();$('s5').style.display='block'};
+$('aiskip').onclick=()=>{st.aiSkipped=true;save();r4();$('s5').style.display='block'};
+
+/* 제출 */
+$('memo').value=st.memo||'';$('memo').oninput=e=>{st.memo=e.target.value;save()};
+$('makeSum').onclick=()=>{$('sum').value=`[11주차 실습 요약 · 국회 예산심의]
+① 수사 분류(일치 ${SENTS.filter((s,k)=>st.cls[k]==s.a).length}/10)
+② 주장-쟁점 매핑 / 말하지 않은 것 정답 ${st.gaps.filter(i=>GAPS[i].ok).length}/3: ${st.gaps.map(i=>GAPS[i].t).join(', ')}
+③ 소위 결정
+${ITEMS.map((it,k)=>`- ${it.t}: ${DEC[st.dec[k]]||'-'}${st.dec[k]==2?'(제57조 동의 확인)':''} / 근거: ${st.why[k]||'-'}`).join('\n')}
+④ AI 검증: ${st.aiSkipped?'건너뜀(과제로 이월)':'완료'} / 분량 ${st.checks[0]?'O':'X'}, 다수표현 ${st.checks[1]?'O':'X'}, 귀속 ${st.checks[2]?'O':'X'}, 숫자 ${st.checks[3]?'O':'X'}
+발견한 것: ${st.memo||'-'}`};
+$('copySum').onclick=()=>copy($('sum').value,'요약을 복사했습니다');
+$('reset').onclick=()=>{if(confirm('모든 진행 상황을 지우고 처음부터 시작합니까?')){localStorage.removeItem(KEY);location.reload()}};
+function copy(t,msg){navigator.clipboard?.writeText(t).then(()=>alert(msg)).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert(msg)})}
+r1();r2();r3();r4();if(st.aiDone||st.aiSkipped)$('s5').style.display='block';go(st.cur||1);
+</script>
+</body>
+</html>
